@@ -5,7 +5,7 @@ import Map, { Marker } from 'react-map-gl/mapbox';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const MAPBOX_TOKEN = 'pk.eyJ1Ijoiem9leWRhd24iLCJhIjoiY21hbG9wdmR4MGIzbTJucTNkazh4aTBpMiJ9.4mM09l8rTCzwTuArn4XxJg'; // Set your mapbox token here
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 export default function WorldMap() {
     return (
@@ -16,7 +16,7 @@ export default function WorldMap() {
                     longitude: -122.4,
                     zoom: 14
                 }}
-                style={{ width: '100%', height: 600 }}
+                style={{ width: '100%', height: 800 }}
                 mapStyle="mapbox://styles/mapbox/streets-v9"
                 mapboxAccessToken={MAPBOX_TOKEN}
             >
