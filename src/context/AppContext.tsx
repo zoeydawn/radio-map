@@ -1,4 +1,5 @@
-// src/context/AppContext.tsx
+'use client';
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { AppState, AppContextProps, RadioStation } from './AppContext.types';
 
