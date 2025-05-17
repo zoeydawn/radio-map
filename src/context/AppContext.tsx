@@ -31,7 +31,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <AppContext.Provider value={{ state, setTheme, setRadioStations }}>
-      {children}
+      <div data-theme={state.theme}>{children}</div>
     </AppContext.Provider>
   )
 }
