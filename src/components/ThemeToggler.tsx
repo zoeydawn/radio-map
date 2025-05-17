@@ -5,15 +5,15 @@ import React from 'react'
 import { useAppContext } from '../context/AppContext'
 
 const ThemeToggler: React.FC = () => {
-  const { state, setTheme } = useAppContext()
+  const { theme, setTheme } = useAppContext()
 
   const toggleTheme = () => {
-    setTheme(state.theme === 'light' ? 'dark' : 'light')
+    setTheme(theme === 'light' ? 'dark' : 'light')
   }
 
   return (
     <button onClick={toggleTheme} className="btn btn-ghost btn-circle">
-      {state.theme === 'dark' && (
+      {theme === 'dark' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -30,7 +30,7 @@ const ThemeToggler: React.FC = () => {
         </svg>
       )}
 
-      {state.theme === 'light' && (
+      {theme === 'light' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

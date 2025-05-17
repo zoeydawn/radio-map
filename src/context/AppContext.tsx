@@ -1,21 +1,16 @@
 'use client'
 
 import React, { createContext, useContext, useState, ReactNode } from 'react'
-import { AppState, AppContextProps, RadioStation } from './AppContext.types'
+import { AppContextProps, RadioStation, Theme } from './AppContext.types'
 import { ViewState } from 'react-map-gl/mapbox'
 
-// Define the initial state
-const initialState: AppState = {
-  theme: 'light', // Default theme
-  radioStations: [], // Default empty array for radio stations
-  viewState: {
-    longitude: -73.7,
-    latitude: 45.5,
-    zoom: 8.5,
-    bearing: 0,
-    pitch: 0,
-    padding: {},
-  },
+const initialViewState: ViewState = {
+  longitude: -73.7,
+  latitude: 45.5,
+  zoom: 8.5,
+  bearing: 0,
+  pitch: 0,
+  padding: {},
 }
 
 // Create the context with a default value (can be undefined or a mock, but we'll handle it in the provider)
@@ -26,28 +21,22 @@ const AppContext = createContext<AppContextProps | undefined>(undefined)
 export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [state, setState] = useState<AppState>(initialState)
-
-  const setTheme = (theme: 'light' | 'dark') => {
-    setState((prevState) => ({ ...prevState, theme }))
-  }
-
-  const setRadioStations = (stations: RadioStation[]) => {
-    setState((prevState) => ({ ...prevState, radioStations: stations }))
-  }
-
-  const setViewState = (viewState: ViewState) => {
-    // console.log({ viewState })
-    setState((prevState) => ({ ...prevState, viewState }))
-  }
-
-  // You can add more complex logic here for updating stations if needed
+  const [theme, setTheme] = useState<Theme>('light')
+  const [radioStations, setRadioStations] = useState<RadioStation[]>([])
+  const [viewState, setViewState] = useState<ViewState>(initialViewState)
 
   return (
     <AppContext.Provider
-      value={{ state, setTheme, setRadioStations, setViewState }}
+      value={{
+        theme,
+        radioStations,
+        viewState,
+        setTheme,
+        setRadioStations,
+        setViewState,
+      }}
     >
-      <div data-theme={state.theme}>{children}</div>
+      <div data-theme={theme}>{children}</div>
     </AppContext.Provider>
   )
 }

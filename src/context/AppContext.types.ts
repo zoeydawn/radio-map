@@ -10,17 +10,14 @@ export interface RadioStation {
   bitrate?: number
 }
 
-// Define the shape of your context state
-export interface AppState {
-  theme: 'light' | 'dark'
-  radioStations: RadioStation[]
-  viewState: ViewState
-}
+export type Theme = 'light' | 'dark'
 
 // Define the shape of your context, including state and updater functions
 export interface AppContextProps {
-  state: AppState
-  setTheme: (theme: 'light' | 'dark') => void
+  theme: Theme
+  radioStations: RadioStation[]
+  viewState: ViewState
+  setTheme: (theme: Theme) => void
   setRadioStations: (stations: RadioStation[]) => void
   setViewState: (viewState: ViewState) => void
   // You could add more specific updaters if needed, e.g., addRadioStation, removeRadioStation
