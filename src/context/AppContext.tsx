@@ -1,8 +1,15 @@
 'use client'
 
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useCallback,
+} from 'react'
 import { AppContextProps, RadioStation, Theme } from './AppContext.types'
 import { ViewState } from 'react-map-gl/mapbox'
+import { stationsByGeographicArea } from '@/services/radioBrowserService'
 
 const initialViewState: ViewState = {
   longitude: -73.7,
@@ -25,6 +32,26 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [radioStations, setRadioStations] = useState<RadioStation[]>([])
   const [viewState, setViewState] = useState<ViewState>(initialViewState)
 
+  const getStationsByLatAndLong = useCallback(async () => {
+    // TODO: add "loading" logic
+    // setIsLoading(true);
+    // setError(null);
+    try {
+      const data = await stationsByGeographicArea(
+        viewState.latitude,
+        viewState.longitude,
+      )
+      setRadioStations(data)
+    } catch (error) {
+      // TODO: error handling logic
+      // setError(err.message || 'Failed to fetch stations');
+      console.error('error in getStations:', error)
+      // setStations([]); // Clear stations on error or keep stale data based on preference
+    } finally {
+      // setIsLoading(false);
+    }
+  }, [])
+
   return (
     <AppContext.Provider
       value={{
@@ -34,6 +61,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         setTheme,
         setRadioStations,
         setViewState,
+        getStationsByLatAndLong: getStationsByLatAndLong,
       }}
     >
       <div data-theme={theme}>{children}</div>

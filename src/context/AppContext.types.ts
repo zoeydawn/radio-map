@@ -20,5 +20,6 @@ export interface AppContextProps {
   setTheme: (theme: Theme) => void
   setRadioStations: (stations: RadioStation[]) => void
   setViewState: (viewState: ViewState) => void
+  getStationsByLatAndLong: () => void
   // You could add more specific updaters if needed, e.g., addRadioStation, removeRadioStation
 }

@@ -10,11 +10,20 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
 export default function WorldMap() {
-  const { theme, viewState, setViewState } = useAppContext()
+  const { theme, viewState, setViewState, getStationsByLatAndLong } =
+    useAppContext()
   const mapStyle =
     theme === 'dark'
       ? 'mapbox://styles/mapbox/dark-v9'
       : 'mapbox://styles/mapbox/streets-v9'
+
+  React.useEffect(() => {
+    // TODO: add logic to reload stations when the map is moved
+    // TODO: check if stations are already loaded to avoid refetching
+    // if (stations.length === 0) {
+    getStationsByLatAndLong()
+    // }
+  }, [])
 
   return (
     <div>
