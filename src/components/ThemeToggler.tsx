@@ -1,7 +1,8 @@
 'use client' // required for any component file that consumes the context.
 
 import React from 'react'
-import { useAppContext } from '../context/AppContext' // Adjust path if needed
+
+import { useAppContext } from '../context/AppContext'
 
 const ThemeToggler: React.FC = () => {
   const { state, setTheme } = useAppContext()
