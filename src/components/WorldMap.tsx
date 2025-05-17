@@ -10,7 +10,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
 export default function WorldMap() {
-  const { state } = useAppContext()
+  const { state, setViewState } = useAppContext()
   const mapStyle =
     state.theme === 'dark'
       ? 'mapbox://styles/mapbox/dark-v9'
@@ -19,11 +19,8 @@ export default function WorldMap() {
   return (
     <div>
       <Map
-        initialViewState={{
-          latitude: 37.8,
-          longitude: -122.4,
-          zoom: 14,
-        }}
+        viewState={{ ...state.viewState, width: 0, height: 0 }} // "width" and "hight" are added here to make TS happy. They don't actually have any effect
+        onMove={(evt) => setViewState(evt.viewState)}
         style={{ width: '100%', height: 800 }}
         mapStyle={mapStyle}
         mapboxAccessToken={MAPBOX_TOKEN}
