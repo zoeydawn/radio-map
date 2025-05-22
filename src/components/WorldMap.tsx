@@ -1,17 +1,24 @@
 'use client'
 
 import * as React from 'react'
-import Map, { Marker } from 'react-map-gl/mapbox'
+import Map, {
+  FullscreenControl,
+  GeolocateControl,
+  NavigationControl,
+  ScaleControl,
+} from 'react-map-gl/mapbox'
 
 import { useAppContext } from '../context/AppContext'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
+import Pins from './Pins'
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
 export default function WorldMap() {
   const { theme, viewState, setViewState, getStationsByLatAndLong } =
     useAppContext()
+
   const mapStyle =
     theme === 'dark'
       ? 'mapbox://styles/mapbox/dark-v9'
@@ -34,7 +41,11 @@ export default function WorldMap() {
         mapStyle={mapStyle}
         mapboxAccessToken={MAPBOX_TOKEN}
       >
-        <Marker longitude={-122.4} latitude={37.8} color="red" />
+        <GeolocateControl position="top-left" />
+        <FullscreenControl position="top-left" />
+        <NavigationControl position="top-left" />
+        <ScaleControl />
+        <Pins />
       </Map>
     </div>
   )

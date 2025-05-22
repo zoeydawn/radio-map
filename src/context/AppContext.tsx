@@ -7,9 +7,10 @@ import React, {
   ReactNode,
   useCallback,
 } from 'react'
-import { AppContextProps, RadioStation, Theme } from './AppContext.types'
+import { AppContextProps, Theme } from './AppContext.types'
 import { ViewState } from 'react-map-gl/mapbox'
 import { stationsByGeographicArea } from '@/services/radioBrowserService'
+import { Station } from 'radio-browser-api'
 
 const initialViewState: ViewState = {
   longitude: -73.7,
@@ -29,7 +30,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [theme, setTheme] = useState<Theme>('light')
-  const [radioStations, setRadioStations] = useState<RadioStation[]>([])
+  const [radioStations, setRadioStations] = useState<Station[]>([])
   const [viewState, setViewState] = useState<ViewState>(initialViewState)
 
   const getStationsByLatAndLong = useCallback(async () => {
