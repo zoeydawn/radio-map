@@ -7,6 +7,10 @@ interface UserInfoProps {
   header?: string
 }
 
+function combineStrings(strings: string[]): string {
+  return strings.join(', ')
+}
+
 const StationList: React.FC<UserInfoProps> = ({ stations, header }) => {
   return (
     <ul className="list bg-base-100 rounded-box shadow-md">
@@ -15,7 +19,7 @@ const StationList: React.FC<UserInfoProps> = ({ stations, header }) => {
       )}
 
       {stations.map((station) => {
-        const { id, name, favicon } = station
+        const { id, name, favicon, tags, language } = station
         const proxiedSrc = favicon
           ? `/api/image-proxy?url=${encodeURIComponent(favicon)}`
           : '/favicon.ico'
@@ -29,13 +33,14 @@ const StationList: React.FC<UserInfoProps> = ({ stations, header }) => {
                 src={proxiedSrc}
                 height={40}
                 width={40}
-                // placeholder="blur"
+                placeholder="blur"
+                blurDataURL={'/favicon.ico'}
               />
             </div>
             <div>
               <div>{name}</div>
               <div className="text-xs uppercase font-semibold opacity-60">
-                Remaining Reason
+                {`${combineStrings(tags)} - ${combineStrings(language)}`}
               </div>
             </div>
             <button className="btn btn-square btn-ghost">
