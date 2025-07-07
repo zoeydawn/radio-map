@@ -1,4 +1,6 @@
 import * as React from 'react'
+import Link from 'next/link'
+
 import ThemeToggler from './ThemeToggler'
 
 export default function Navbar() {
@@ -28,10 +30,10 @@ export default function Navbar() {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a>Map</a>
+              <Link href="/">Map</Link>
             </li>
             <li>
-              <a>List</a>
+              <Link href="/stations">List</Link>
             </li>
             <li>
               <a>Search</a>
