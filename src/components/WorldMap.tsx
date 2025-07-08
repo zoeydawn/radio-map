@@ -16,21 +16,32 @@ import Pins from './Pins'
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
 export default function WorldMap() {
-  const { theme, viewState, setViewState, getStationsByLatAndLong } =
-    useAppContext()
+  const {
+    theme,
+    viewState,
+    setViewState,
+    // getStationsByLatAndLong,
+    radioStations,
+  } = useAppContext()
+  // const { latitude, longitude } = viewState
 
   const mapStyle =
     theme === 'dark'
       ? 'mapbox://styles/mapbox/dark-v9'
       : 'mapbox://styles/mapbox/streets-v9'
 
-  React.useEffect(() => {
-    // TODO: add logic to reload stations when the map is moved
-    // TODO: check if stations are already loaded to avoid refetching
-    // if (stations.length === 0) {
-    getStationsByLatAndLong()
-    // }
-  }, [])
+  // React.useEffect(() => {
+  //   // TODO: add logic to reload stations when the map is moved
+  //   // TODO: check if stations are already loaded to avoid refetching
+  //   // if (stations.length === 0) {
+  //   getStationsByLatAndLong(latitude, longitude)
+  //   // }
+  // }, [latitude, longitude, getStationsByLatAndLong])
+
+  // because there is a weird issue with the map not re-rendering when data changes
+  if (!radioStations.length) {
+    return <div>loading map...</div>
+  }
 
   return (
     <div>

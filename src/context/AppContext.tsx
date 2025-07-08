@@ -5,7 +5,7 @@ import React, {
   useContext,
   useState,
   ReactNode,
-  useCallback,
+  useEffect,
 } from 'react'
 import { AppContextProps, Theme } from './AppContext.types'
 import { ViewState } from 'react-map-gl/mapbox'
@@ -29,19 +29,17 @@ const AppContext = createContext<AppContextProps | undefined>(undefined)
 export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [theme, setTheme] = useState<Theme>('light')
+  const [theme, setTheme] = useState<Theme>('dark')
   const [radioStations, setRadioStations] = useState<Station[]>([])
   const [viewState, setViewState] = useState<ViewState>(initialViewState)
 
-  const getStationsByLatAndLong = useCallback(async () => {
+  const getStationsByLatAndLong = async (lat: number, lon: number) => {
     // TODO: add "loading" logic
     // setIsLoading(true);
     // setError(null);
     try {
-      const data = await stationsByGeographicArea(
-        viewState.latitude,
-        viewState.longitude,
-      )
+      const data = await stationsByGeographicArea(lat, lon)
+
       setRadioStations(data)
     } catch (error) {
       // TODO: error handling logic
@@ -51,7 +49,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     } finally {
       // setIsLoading(false);
     }
-  }, [])
+  }
+
+  // Fetch data when the provider mounts
+  useEffect(() => {
+    getStationsByLatAndLong(viewState.latitude, viewState.longitude)
+  }, []) // Empty dependency array means this runs once on mount
 
   return (
     <AppContext.Provider
@@ -62,7 +65,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         setTheme,
         setRadioStations,
         setViewState,
-        getStationsByLatAndLong: getStationsByLatAndLong,
+        getStationsByLatAndLong,
       }}
     >
       <div data-theme={theme}>{children}</div>
