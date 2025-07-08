@@ -12,6 +12,7 @@ import { useAppContext } from '../context/AppContext'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import Pins from './Pins'
+import Loader from './Loader'
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
@@ -45,7 +46,7 @@ export default function WorldMap() {
   // We still want to display the map when fetching additional stations.
   // Because when moving the map, we fetch additional stations but we don't delete the existing stations from state.
   if (isLoading && !radioStations.length) {
-    return <span className="loading loading-ring loading-xl"></span>
+    return <Loader />
   }
 
   return (
