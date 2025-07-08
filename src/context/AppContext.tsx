@@ -11,25 +11,7 @@ import { AppContextProps, Theme } from './AppContext.types'
 import { ViewState } from 'react-map-gl/mapbox'
 import { stationsByGeographicArea } from '@/services/radioBrowserService'
 import { Station } from 'radio-browser-api'
-
-interface HasId {
-  id: string
-  [key: string]: any // Allows for other properties
-}
-
-function removeDuplicatesById<T extends HasId>(array: T[]): T[] {
-  const seenIds = new Set<string>() // Use Set for efficient lookups
-  const uniqueArray: T[] = []
-
-  for (const item of array) {
-    if (!seenIds.has(item.id)) {
-      seenIds.add(item.id)
-      uniqueArray.push(item)
-    }
-  }
-
-  return uniqueArray
-}
+import { removeDuplicatesById } from '@/utils/radioStations'
 
 const initialViewState: ViewState = {
   longitude: -73.7,
@@ -62,6 +44,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setRadioStations(newStationArray)
   }
 
+  // TODO: Prevent redundant fetching - don't fetch new stations if the lat and lon hasn't changed much.
   const getStationsByLatAndLong = async (lat: number, lon: number) => {
     // TODO: add error logic
     setIsLoading(true)
