@@ -12,6 +12,25 @@ import { ViewState } from 'react-map-gl/mapbox'
 import { stationsByGeographicArea } from '@/services/radioBrowserService'
 import { Station } from 'radio-browser-api'
 
+interface HasId {
+  id: string
+  [key: string]: any // Allows for other properties
+}
+
+function removeDuplicatesById<T extends HasId>(array: T[]): T[] {
+  const seenIds = new Set<string>() // Use Set for efficient lookups
+  const uniqueArray: T[] = []
+
+  for (const item of array) {
+    if (!seenIds.has(item.id)) {
+      seenIds.add(item.id)
+      uniqueArray.push(item)
+    }
+  }
+
+  return uniqueArray
+}
+
 const initialViewState: ViewState = {
   longitude: -73.7,
   latitude: 45.5,
@@ -34,6 +53,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [radioStations, setRadioStations] = useState<Station[]>([])
   const [viewState, setViewState] = useState<ViewState>(initialViewState)
 
+  // add new stations to the state without removing old ones
+  // because we want new new stations to appear while moving the map, without deleting the old ones.
+  const addNewRadioStations = (newStations: Station[]) => {
+    const combinedStationArray = [...radioStations, ...newStations]
+    const newStationArray = removeDuplicatesById(combinedStationArray)
+
+    setRadioStations(newStationArray)
+  }
+
   const getStationsByLatAndLong = async (lat: number, lon: number) => {
     // TODO: add error logic
     setIsLoading(true)
@@ -41,7 +69,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     try {
       const data = await stationsByGeographicArea(lat, lon)
 
-      setRadioStations(data)
+      addNewRadioStations(data)
     } catch (error) {
       // TODO: error handling logic
       // setError(err.message || 'Failed to fetch stations');

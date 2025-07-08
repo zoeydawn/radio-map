@@ -23,7 +23,7 @@ const Pin = ({ size = 20 }) => {
 
 export default function Pins() {
   const { radioStations } = useAppContext()
-  console.log('radioStations in Pins:', radioStations)
+  // console.log('radioStations in Pins:', radioStations)
 
   return (
     <>
@@ -51,7 +51,7 @@ export default function Pins() {
               )
             }
           }),
-        [],
+        [radioStations],
       )}
     </>
   )
