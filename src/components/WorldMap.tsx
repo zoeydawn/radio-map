@@ -18,6 +18,7 @@ const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 export default function WorldMap() {
   const {
     theme,
+    isLoading,
     viewState,
     setViewState,
     // getStationsByLatAndLong,
@@ -38,9 +39,13 @@ export default function WorldMap() {
   //   // }
   // }, [latitude, longitude, getStationsByLatAndLong])
 
-  // because there is a weird issue with the map not re-rendering when data changes
-  if (!radioStations.length) {
-    return <div>loading map...</div>
+  // TODO: there is a weird issue with the map not re-rendering when data changes
+
+  // We only want to show the loading spinner initially when there are no stations in the state.
+  // We still want to display the map when fetching additional stations.
+  // Because when moving the map, we fetch additional stations but we don't delete the existing stations from state.
+  if (isLoading && !radioStations.length) {
+    return <span className="loading loading-ring loading-xl"></span>
   }
 
   return (

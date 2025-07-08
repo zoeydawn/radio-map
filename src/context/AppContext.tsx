@@ -30,12 +30,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [theme, setTheme] = useState<Theme>('dark')
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [radioStations, setRadioStations] = useState<Station[]>([])
   const [viewState, setViewState] = useState<ViewState>(initialViewState)
 
   const getStationsByLatAndLong = async (lat: number, lon: number) => {
-    // TODO: add "loading" logic
-    // setIsLoading(true);
+    // TODO: add error logic
+    setIsLoading(true)
     // setError(null);
     try {
       const data = await stationsByGeographicArea(lat, lon)
@@ -47,7 +48,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       console.error('error in getStations:', error)
       // setStations([]); // Clear stations on error or keep stale data based on preference
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false)
     }
   }
 
@@ -60,9 +61,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     <AppContext.Provider
       value={{
         theme,
+        isLoading,
         radioStations,
         viewState,
         setTheme,
+        setIsLoading,
         setRadioStations,
         setViewState,
         getStationsByLatAndLong,
