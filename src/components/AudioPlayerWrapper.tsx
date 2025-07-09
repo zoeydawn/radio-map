@@ -7,6 +7,7 @@ import AudioPlayer from './AudioPlayer'
 
 const AudioPlayerWrapper: React.FC = () => {
   const { selectedStation, setSelectedStation } = useAppContext()
+  // console.log('selectedStation in AudioPlayerWrapper:', selectedStation)
 
   return (
     <>

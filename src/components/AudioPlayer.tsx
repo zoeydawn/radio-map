@@ -27,8 +27,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       if (autoPlay) {
         audioRef.current.play().catch((error) => {
           console.error('Autoplay failed:', error)
-          // Inform the user that autoplay might be blocked
-          // You could display a message on the UI here
+          // TODO: Inform the user that autoplay might be blocked
+          // display an error message in the player view
         })
       }
 
@@ -37,13 +37,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       const handlePlay = () => setIsPlaying(true)
       const handlePause = () => setIsPlaying(false)
       const handleTimeUpdate = () => setCurrentTime(audio.currentTime)
-      // const handleLoadedMetadata = () => setDuration(audio.duration)
       const handleEnded = () => setIsPlaying(false)
 
       audio.addEventListener('play', handlePlay)
       audio.addEventListener('pause', handlePause)
       audio.addEventListener('timeupdate', handleTimeUpdate)
-      // audio.addEventListener('loadedmetadata', handleLoadedMetadata)
       audio.addEventListener('ended', handleEnded)
 
       // Cleanup event listeners on component unmount
@@ -51,7 +49,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         audio.removeEventListener('play', handlePlay)
         audio.removeEventListener('pause', handlePause)
         audio.removeEventListener('timeupdate', handleTimeUpdate)
-        // audio.removeEventListener('loadedmetadata', handleLoadedMetadata)
         audio.removeEventListener('ended', handleEnded)
       }
     }
@@ -70,13 +67,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       }
     }
   }
-
-  // Function to handle seeking
-  // const handleSeek = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (audioRef.current) {
-  //     audioRef.current.currentTime = Number(event.target.value)
-  //   }
-  // }
 
   // Helper to format time
   const formatTime = (seconds: number) => {
@@ -121,7 +111,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           <button
             className="btn btn-square btn-ghost"
             onClick={togglePlayPause}
-            // className="p-3 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200"
             aria-label={isPlaying ? 'Pause' : 'Play'}
           >
             {isPlaying ? (
@@ -140,26 +129,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
                 />
               </svg>
             ) : (
-              // <svg
-              //   xmlns="http://www.w3.org/2000/svg"
-              //   className="h-6 w-6"
-              //   fill="none"
-              //   viewBox="0 0 24 24"
-              //   stroke="currentColor"
-              //   strokeWidth={2}
-              // >
-              //   <path
-              //     strokeLinecap="round"
-              //     strokeLinejoin="round"
-              //     d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-              //   />
-              //   <path
-              //     strokeLinecap="round"
-              //     strokeLinejoin="round"
-              //     d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              //   />
-              // </svg>
-
               <svg
                 className="size-[1.2em]"
                 xmlns="http://www.w3.org/2000/svg"
@@ -177,34 +146,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
               </svg>
             )}
           </button>
-
-          {/* <button className="btn btn-square btn-ghost">
-            <svg
-              className="size-[1.2em]"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <g
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
-              </g>
-            </svg>
-          </button> */}
-
-          {/* <input
-            type="range"
-            min="0"
-            max={duration}
-            value={currentTime}
-            onChange={handleSeek}
-            className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
-            aria-label="Seek audio"
-          /> */}
 
           <div className="text-gray-700 text-sm font-mono">
             {formatTime(currentTime)}{' '}
