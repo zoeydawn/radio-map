@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import { AppProvider } from '@/context/AppContext'
+import AudioPlayerWrapper from '@/components/AudioPlayerWrapper'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,6 +33,8 @@ export default function RootLayout({
         <AppProvider>
           <Navbar />
           {children}
+          <AudioPlayerWrapper />
+          {/* <Footer /> */}
         </AppProvider>
       </body>
     </html>

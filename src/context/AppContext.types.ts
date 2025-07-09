@@ -9,10 +9,11 @@ export interface AppContextProps {
   isLoading: boolean
   radioStations: Station[]
   viewState: ViewState
+  selectedStation: Station | null
   setTheme: (theme: Theme) => void
   setIsLoading: (isLoading: boolean) => void
   setRadioStations: (stations: Station[]) => void
   setViewState: (viewState: ViewState) => void
   getStationsByLatAndLong: (lat: number, lon: number) => void
-  // You could add more specific updaters if needed, e.g., addRadioStation, removeRadioStation
+  setSelectedStation: (station: Station | null) => void
 }

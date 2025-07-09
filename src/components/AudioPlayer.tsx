@@ -1,0 +1,160 @@
+import { Station } from 'radio-browser-api'
+import React, { useRef, useEffect, useState } from 'react'
+
+// Define the props for the AudioPlayer component
+interface AudioPlayerProps {
+  station: Station // The URL of the MP3 file
+  handleClose: () => void
+  autoPlay?: boolean // Whether the audio should autoplay (defaults to false)
+  loop?: boolean // Whether the audio should loop (defaults to false)
+}
+
+const AudioPlayer: React.FC<AudioPlayerProps> = ({
+  station,
+  autoPlay = false,
+  loop = false,
+}) => {
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+
+  const { urlResolved } = station
+
+  // Effect to handle autoplay and initial loading
+  useEffect(() => {
+    if (audioRef.current) {
+      if (autoPlay) {
+        audioRef.current.play().catch((error) => {
+          console.error('Autoplay failed:', error)
+          // Inform the user that autoplay might be blocked
+          // You could display a message on the UI here
+        })
+      }
+
+      // Event listeners for updating state
+      const audio = audioRef.current
+      const handlePlay = () => setIsPlaying(true)
+      const handlePause = () => setIsPlaying(false)
+      const handleTimeUpdate = () => setCurrentTime(audio.currentTime)
+      const handleLoadedMetadata = () => setDuration(audio.duration)
+      const handleEnded = () => setIsPlaying(false)
+
+      audio.addEventListener('play', handlePlay)
+      audio.addEventListener('pause', handlePause)
+      audio.addEventListener('timeupdate', handleTimeUpdate)
+      audio.addEventListener('loadedmetadata', handleLoadedMetadata)
+      audio.addEventListener('ended', handleEnded)
+
+      // Cleanup event listeners on component unmount
+      return () => {
+        audio.removeEventListener('play', handlePlay)
+        audio.removeEventListener('pause', handlePause)
+        audio.removeEventListener('timeupdate', handleTimeUpdate)
+        audio.removeEventListener('loadedmetadata', handleLoadedMetadata)
+        audio.removeEventListener('ended', handleEnded)
+      }
+    }
+  }, [autoPlay]) // Re-run if autoPlay prop changes
+
+  // Function to toggle play/pause
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause()
+      } else {
+        audioRef.current.play().catch((error) => {
+          console.error('Play failed:', error)
+          // Handle cases where play might be blocked (e.g., by browser policies)
+        })
+      }
+    }
+  }
+
+  // Function to handle seeking
+  const handleSeek = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Number(event.target.value)
+    }
+  }
+
+  // Helper to format time
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = Math.floor(seconds % 60)
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`
+  }
+
+  return (
+    <div className="flex flex-col items-center space-y-4">
+      <audio
+        ref={audioRef}
+        src={urlResolved}
+        loop={loop}
+        preload="metadata"
+        className="hidden"
+      />
+
+      <div className="flex items-center space-x-4 w-full">
+        <button
+          onClick={togglePlayPause}
+          className="p-3 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200"
+          aria-label={isPlaying ? 'Pause' : 'Play'}
+        >
+          {isPlaying ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          )}
+        </button>
+
+        <input
+          type="range"
+          min="0"
+          max={duration}
+          value={currentTime}
+          onChange={handleSeek}
+          className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
+          aria-label="Seek audio"
+        />
+
+        <div className="text-gray-700 text-sm font-mono">
+          {formatTime(currentTime)} / {formatTime(duration)}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default AudioPlayer
