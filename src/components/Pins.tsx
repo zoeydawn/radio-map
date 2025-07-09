@@ -26,11 +26,13 @@ const Pin = ({ size = 20 }) => {
 interface StationModelProps {
   station: Station
   handleClose: () => void
+  handlePlay: () => void
 }
 
 const StationModel: React.FC<StationModelProps> = ({
   station,
   handleClose,
+  handlePlay,
 }) => (
   <dialog id="my_modal_5" className="modal modal-open">
     <div className="modal-box">
@@ -42,24 +44,26 @@ const StationModel: React.FC<StationModelProps> = ({
             Close
           </button>
         </form>
+        <button className="btn" onClick={handlePlay}>
+          Play
+        </button>
       </div>
     </div>
   </dialog>
 )
 
 export default function Pins() {
-  const { radioStations } = useAppContext()
-  const [selectedStation, setSelectedStation] = React.useState<Station | null>(
-    null,
-  )
+  const { radioStations, setSelectedStation } = useAppContext()
+  const [viewedStation, setViewedStation] = React.useState<Station | null>(null)
   // console.log('radioStations in Pins:', radioStations)
 
   return (
     <>
-      {!!selectedStation && (
+      {!!viewedStation && (
         <StationModel
-          station={selectedStation}
-          handleClose={() => setSelectedStation(null)}
+          station={viewedStation}
+          handleClose={() => setViewedStation(null)}
+          handlePlay={() => setSelectedStation(viewedStation)}
         />
       )}
       {React.useMemo(
@@ -78,7 +82,7 @@ export default function Pins() {
                     // If we let the click event propagates to the map, it will immediately close the popup
                     // with `closeOnClick: true`
                     e.originalEvent.stopPropagation()
-                    setSelectedStation(radioStation)
+                    setViewedStation(radioStation)
                   }}
                 >
                   <Pin />
