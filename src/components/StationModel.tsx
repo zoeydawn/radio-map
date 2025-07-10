@@ -2,15 +2,11 @@
 
 import { simpleStationDiscription } from '@/utils/radioStations'
 import { useAppContext } from '../context/AppContext'
+import PlayButton from './PlayButton'
+import LikeButton from './LikeButton'
 
 const StationModel: React.FC = ({}) => {
-  const { setSelectedStation, setIsPlaying, viewedStation, setViewedStation } =
-    useAppContext()
-
-  const handlePlay = () => {
-    setIsPlaying(true) // otherwise the value can be incorrect when switch from one station to another
-    setSelectedStation(viewedStation)
-  }
+  const { viewedStation, setViewedStation } = useAppContext()
 
   const handleClose = () => {
     setViewedStation(null)
@@ -25,14 +21,27 @@ const StationModel: React.FC = ({}) => {
       <div className="modal-box">
         <h3 className="font-bold text-lg">{viewedStation.name}</h3>
         <p className="py-4">{simpleStationDiscription(viewedStation)}</p>
-        <div className="modal-action">
-          <form method="dialog">
-            <button className="btn" onClick={handleClose}>
-              Close
-            </button>
-          </form>
-          <button className="btn" onClick={handlePlay}>
-            Play
+        <div className="flex items-center justify-between w-full">
+          <LikeButton />
+          <PlayButton station={viewedStation} />
+          <button
+            className="btn btn-square btn-ghost mt-1.5"
+            onClick={handleClose}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
           </button>
         </div>
       </div>

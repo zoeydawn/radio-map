@@ -1,6 +1,7 @@
 import { Station } from 'radio-browser-api'
 import React, { useRef, useEffect, useState } from 'react'
 import PlayButton from './PlayButton'
+import LikeButton from './LikeButton'
 
 // Define the props for the AudioPlayer component
 interface AudioPlayerProps {
@@ -85,24 +86,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         <h3 className="font-bold text-lg">{station.name}</h3>
 
         <div className="flex items-center justify-between w-full max-w-150">
-          {/* like button  */}
-          <button className="btn btn-square btn-ghost">
-            <svg
-              className="size-[1.2em]"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <g
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
-              </g>
-            </svg>
-          </button>
+          <LikeButton />
 
           {/* play/pause button */}
           <PlayButton station={station} />

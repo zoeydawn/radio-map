@@ -13,7 +13,7 @@ export const stationsByGeographicArea = async (
     geo_distance: 250000,
     limit: 100,
   })
-  console.log({ response, geo_lat, geo_long })
+  // console.log({ response, geo_lat, geo_long })
 
   return response || []
 }
