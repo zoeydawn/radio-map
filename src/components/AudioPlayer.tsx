@@ -1,5 +1,6 @@
 import { Station } from 'radio-browser-api'
 import React, { useRef, useEffect, useState } from 'react'
+import PlayButton from './PlayButton'
 
 // Define the props for the AudioPlayer component
 interface AudioPlayerProps {
@@ -20,7 +21,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [currentTime, setCurrentTime] = useState(0)
-  // const [duration, setDuration] = useState(0)
 
   const { urlResolved } = station
 
@@ -37,39 +37,33 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
       // Event listeners for updating state
       const audio = audioRef.current
-      const handlePlay = () => setIsPlaying(true)
-      const handlePause = () => setIsPlaying(false)
       const handleTimeUpdate = () => setCurrentTime(audio.currentTime)
       const handleEnded = () => setIsPlaying(false)
 
-      audio.addEventListener('play', handlePlay)
-      audio.addEventListener('pause', handlePause)
       audio.addEventListener('timeupdate', handleTimeUpdate)
       audio.addEventListener('ended', handleEnded)
 
       // Cleanup event listeners on component unmount
       return () => {
-        audio.removeEventListener('play', handlePlay)
-        audio.removeEventListener('pause', handlePause)
         audio.removeEventListener('timeupdate', handleTimeUpdate)
         audio.removeEventListener('ended', handleEnded)
       }
     }
   }, [autoPlay, station.id, setIsPlaying]) // Re-run if either autoPlay or station prop changes
 
-  // Function to toggle play/pause
-  const togglePlayPause = () => {
+  // so autoRef will respond to isPlaying
+  useEffect(() => {
     if (audioRef.current) {
-      if (isPlaying) {
+      if (!isPlaying) {
         audioRef.current.pause()
       } else {
         audioRef.current.play().catch((error) => {
           console.error('Play failed:', error)
-          // Handle cases where play might be blocked (e.g., by browser policies)
+          // TODO: Handle cases where play might be blocked (e.g., by browser policies)
         })
       }
     }
-  }
+  }, [isPlaying])
 
   // Helper to format time
   const formatTime = (seconds: number) => {
@@ -111,44 +105,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           </button>
 
           {/* play/pause button */}
-          <button
-            className="btn btn-square btn-ghost"
-            onClick={togglePlayPause}
-            aria-label={isPlaying ? 'Pause' : 'Play'}
-          >
-            {isPlaying ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="size-[1.2em]"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <g
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  strokeWidth="2"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <path d="M6 3L20 12 6 21 6 3z"></path>
-                </g>
-              </svg>
-            )}
-          </button>
+          <PlayButton />
 
           <div className="text-gray-700 text-sm font-mono">
             {formatTime(currentTime)}{' '}

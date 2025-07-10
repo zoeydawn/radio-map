@@ -53,7 +53,7 @@ const StationModel: React.FC<StationModelProps> = ({
 )
 
 export default function Pins() {
-  const { radioStations, setSelectedStation } = useAppContext()
+  const { radioStations, setSelectedStation, setIsPlaying } = useAppContext()
   const [viewedStation, setViewedStation] = React.useState<Station | null>(null)
   // console.log('radioStations in Pins:', radioStations)
 
@@ -63,7 +63,10 @@ export default function Pins() {
         <StationModel
           station={viewedStation}
           handleClose={() => setViewedStation(null)}
-          handlePlay={() => setSelectedStation(viewedStation)}
+          handlePlay={() => {
+            setIsPlaying(true) // otherwise the value can be incorrect when switch from one station to another
+            setSelectedStation(viewedStation)
+          }}
         />
       )}
       {React.useMemo(
