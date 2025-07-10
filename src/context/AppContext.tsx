@@ -31,10 +31,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [theme, setTheme] = useState<Theme>('dark')
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [radioStations, setRadioStations] = useState<Station[]>([])
-  const [viewState, setViewState] = useState<ViewState>(initialViewState)
-  const [selectedStation, setSelectedStation] = useState<Station | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true) // when initially fetching stations by geographic possition 
+  const [radioStations, setRadioStations] = useState<Station[]>([]) // stations by geographic possition 
+  const [viewState, setViewState] = useState<ViewState>(initialViewState) // view state for the map
+  const [selectedStation, setSelectedStation] = useState<Station | null>(null) // station to be played
+  const [viewedStation, setViewedStation] = useState<Station | null>(null) // station to view details of 
   const [isPlaying, setIsPlaying] = useState<boolean>(true)
 
   // add new stations to the state without removing old ones
@@ -78,6 +79,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         radioStations,
         viewState,
         selectedStation,
+        viewedStation,
         isPlaying,
         setTheme,
         setIsLoading,
@@ -85,6 +87,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         setViewState,
         getStationsByLatAndLong,
         setSelectedStation,
+        setViewedStation,
         setIsPlaying,
       }}
     >

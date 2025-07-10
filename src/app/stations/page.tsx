@@ -6,11 +6,11 @@ import { useAppContext } from '@/context/AppContext'
 
 export default function Stations() {
   const { radioStations, isLoading } = useAppContext()
-  console.log('radioStations in list:', radioStations)
+  // console.log('radioStations in list:', radioStations)
 
   return (
     <>
-      <StationList stations={radioStations} header="this is a list" />
+      <StationList stations={radioStations} header="Stations near you" />
       {isLoading && <Loader />}
     </>
   )
