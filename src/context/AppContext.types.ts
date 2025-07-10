@@ -10,10 +10,12 @@ export interface AppContextProps {
   radioStations: Station[]
   viewState: ViewState
   selectedStation: Station | null
+  isPlaying: boolean
   setTheme: (theme: Theme) => void
   setIsLoading: (isLoading: boolean) => void
   setRadioStations: (stations: Station[]) => void
   setViewState: (viewState: ViewState) => void
   getStationsByLatAndLong: (lat: number, lon: number) => void
   setSelectedStation: (station: Station | null) => void
+  setIsPlaying: (isPlaying: boolean) => void
 }

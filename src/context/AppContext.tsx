@@ -35,6 +35,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [radioStations, setRadioStations] = useState<Station[]>([])
   const [viewState, setViewState] = useState<ViewState>(initialViewState)
   const [selectedStation, setSelectedStation] = useState<Station | null>(null)
+  const [isPlaying, setIsPlaying] = useState<boolean>(true)
 
   // add new stations to the state without removing old ones
   // because we want new new stations to appear while moving the map, without deleting the old ones.
@@ -77,12 +78,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         radioStations,
         viewState,
         selectedStation,
+        isPlaying,
         setTheme,
         setIsLoading,
         setRadioStations,
         setViewState,
         getStationsByLatAndLong,
         setSelectedStation,
+        setIsPlaying,
       }}
     >
       <div data-theme={theme}>{children}</div>

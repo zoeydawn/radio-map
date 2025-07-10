@@ -6,15 +6,19 @@ import { useAppContext } from '../context/AppContext'
 import AudioPlayer from './AudioPlayer'
 
 const AudioPlayerWrapper: React.FC = () => {
-  const { selectedStation, setSelectedStation } = useAppContext()
+  const { selectedStation, setSelectedStation, isPlaying, setIsPlaying } =
+    useAppContext()
   // console.log('selectedStation in AudioPlayerWrapper:', selectedStation)
 
   return (
     <>
+      s
       {selectedStation && (
         <AudioPlayer
           station={selectedStation}
           handleClose={() => setSelectedStation(null)}
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
         />
       )}
     </>

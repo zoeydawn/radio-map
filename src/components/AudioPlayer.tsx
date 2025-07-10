@@ -5,17 +5,20 @@ import React, { useRef, useEffect, useState } from 'react'
 interface AudioPlayerProps {
   station: Station // The URL of the MP3 file
   handleClose: () => void
+  isPlaying: boolean
+  setIsPlaying: (value: boolean) => void
   autoPlay?: boolean // Whether the audio should autoplay (defaults to true)
   loop?: boolean // Whether the audio should loop (defaults to false)
 }
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({
   station,
+  isPlaying,
+  setIsPlaying,
   autoPlay = true,
   loop = false,
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   // const [duration, setDuration] = useState(0)
 
@@ -52,7 +55,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         audio.removeEventListener('ended', handleEnded)
       }
     }
-  }, [autoPlay, station.id]) // Re-run if either autoPlay or station prop changes
+  }, [autoPlay, station.id, setIsPlaying]) // Re-run if either autoPlay or station prop changes
 
   // Function to toggle play/pause
   const togglePlayPause = () => {
