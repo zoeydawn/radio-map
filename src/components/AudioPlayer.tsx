@@ -105,7 +105,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           </button>
 
           {/* play/pause button */}
-          <PlayButton />
+          <PlayButton station={station} />
 
           <div className="text-gray-700 text-sm font-mono">
             {formatTime(currentTime)}{' '}

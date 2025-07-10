@@ -3,21 +3,36 @@
 import React from 'react'
 
 import { useAppContext } from '../context/AppContext'
+import { Station } from 'radio-browser-api'
 
-const PlayButton: React.FC = () => {
-  const { isPlaying, setIsPlaying } = useAppContext()
+interface PlayButtonProps {
+  station: Station
+}
+
+const PlayButton: React.FC<PlayButtonProps> = ({ station }) => {
+  const { isPlaying, setIsPlaying, selectedStation, setSelectedStation } =
+    useAppContext()
+
+  const isCurrentStationSelected =
+    selectedStation && station.id === selectedStation.id
+  const isCurrentStationPlaying = isCurrentStationSelected && isPlaying
 
   const togglePlayPause = () => {
-    setIsPlaying(!isPlaying)
+    if (isCurrentStationSelected) {
+      setIsPlaying(!isPlaying)
+    } else {
+      setSelectedStation(station)
+      setIsPlaying(true)
+    }
   }
 
   return (
     <button
       className="btn btn-square btn-ghost"
       onClick={togglePlayPause}
-      aria-label={isPlaying ? 'Pause' : 'Play'}
+      aria-label={isCurrentStationPlaying ? 'Pause' : 'Play'}
     >
-      {isPlaying ? (
+      {isCurrentStationPlaying ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6"
