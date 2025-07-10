@@ -5,12 +5,16 @@ import StationList from '@/components/StationList'
 import { useAppContext } from '@/context/AppContext'
 
 export default function Stations() {
-  const { radioStations, isLoading } = useAppContext()
+  const { radioStations, isLoading, setViewedStation } = useAppContext()
   // console.log('radioStations in list:', radioStations)
 
   return (
     <>
-      <StationList stations={radioStations} header="Stations near you" />
+      <StationList
+        stations={radioStations}
+        setViewedStation={setViewedStation}
+        header="Stations near you"
+      />
       {isLoading && <Loader />}
     </>
   )

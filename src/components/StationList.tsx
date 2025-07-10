@@ -7,10 +7,15 @@ import LikeButton from './LikeButton'
 
 interface UserInfoProps {
   stations: Station[]
+  setViewedStation: (station: Station) => void
   header?: string
 }
 
-const StationList: React.FC<UserInfoProps> = ({ stations, header }) => {
+const StationList: React.FC<UserInfoProps> = ({
+  stations,
+  header,
+  setViewedStation,
+}) => {
   return (
     <ul className="list bg-base-100 rounded-box shadow-md max-w-150 m-auto mt-4">
       {!!header && (
@@ -25,7 +30,10 @@ const StationList: React.FC<UserInfoProps> = ({ stations, header }) => {
 
         return (
           <li className="list-row" key={`station-${id}`}>
-            <div>
+            <div
+              className="cursor-pointer"
+              onClick={() => setViewedStation(station)}
+            >
               <Image
                 className="size-10 rounded-box"
                 alt={name}
@@ -36,7 +44,10 @@ const StationList: React.FC<UserInfoProps> = ({ stations, header }) => {
                 blurDataURL={'/favicon.ico'}
               />
             </div>
-            <div>
+            <div
+              className="cursor-pointer"
+              onClick={() => setViewedStation(station)}
+            >
               <div>{name}</div>
               <div className="text-xs uppercase font-semibold opacity-60">
                 {simpleStationDiscription(station)}
