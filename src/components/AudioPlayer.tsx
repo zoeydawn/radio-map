@@ -9,6 +9,7 @@ interface AudioPlayerProps {
   handleClose: () => void
   isPlaying: boolean
   setIsPlaying: (value: boolean) => void
+  setViewedStation: (station: Station | null) => void
   autoPlay?: boolean // Whether the audio should autoplay (defaults to true)
   loop?: boolean // Whether the audio should loop (defaults to false)
 }
@@ -17,6 +18,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   station,
   isPlaying,
   setIsPlaying,
+  setViewedStation,
   autoPlay = true,
   loop = false,
 }) => {
@@ -83,7 +85,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           preload="metadata"
           className="hidden"
         />
-        <h3 className="font-bold text-lg">{station.name}</h3>
+        <h3
+          onClick={() => setViewedStation(station)}
+          className="font-bold text-lg link link-hover"
+        >
+          {station.name}
+        </h3>
 
         <div className="flex items-center justify-between w-full max-w-150">
           <LikeButton />
