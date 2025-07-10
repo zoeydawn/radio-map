@@ -8,6 +8,10 @@ export function simpleStationDiscription({ tags, language }: Station) {
   return `${combineStrings(tags)} - ${combineStrings(language)}`
 }
 
+export function locationString(station: Station) {
+  return `${station.state}, ${station.country}`
+}
+
 // as we add more stations to the state, make sure there are no duplicates
 export function removeDuplicatesById(array: Station[]): Station[] {
   const seenIds = new Set<string>() // Use Set for efficient lookups
