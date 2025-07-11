@@ -38,13 +38,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [viewedStation, setViewedStation] = useState<Station | null>(null) // station to view details of
   const [isPlaying, setIsPlaying] = useState<boolean>(true)
   const [playError, setPlayError] = useState('')
+  const [favorites, setFavorites] = useState<Station[]>([]) // stations by geographic possition
 
   // save theme to local storage and update state
   const setAndSaveTheme = (theme: Theme) => {
-    // save theme to local storage
     setTheme(theme)
 
     try {
+      // save theme to local storage
       localStorage.setItem('theme', theme)
       // console.log('Theme saved successfully!')
     } catch (error) {
@@ -62,6 +63,34 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       }
     } catch (error) {
       console.error('Error reading theme from local storage:', error)
+    }
+  }
+
+  // add station to favorites and update localstorage
+  const addFavorite = (station: Station) => {
+    const updatedFavorites = [...favorites, station]
+    setFavorites(updatedFavorites)
+
+    // save local storage
+    try {
+      const stringifiedFavorites = JSON.stringify(updatedFavorites)
+      localStorage.setItem('favorites', stringifiedFavorites)
+      // console.log('Theme saved successfully!')
+    } catch (error) {
+      console.error('Error saving favorites to local storage:', error)
+    }
+  }
+
+  // read theme to local storage and update state
+  const readAndSaveFavorites = () => {
+    try {
+      const savedFavorites = localStorage.getItem('favorites')
+
+      if (savedFavorites) {
+        setFavorites(JSON.parse(savedFavorites))
+      }
+    } catch (error) {
+      console.error('Error reading favorites from local storage:', error)
     }
   }
 
@@ -97,9 +126,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     // read theme from local storage and update state accordingly
     readAndSaveTheme()
+    readAndSaveFavorites()
 
     getStationsByLatAndLong(viewState.latitude, viewState.longitude)
   }, []) // Empty dependency array means this runs once on mount
+
+  // a set containing the ids of the stations in favorites
+  // this is so we can efficently look up whether a station is already in favorites
+  const favoritesIdsSet = new Set(favorites.map((station) => station.id))
 
   return (
     <AppContext.Provider
@@ -112,6 +146,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         viewedStation,
         isPlaying,
         playError,
+        favorites,
+        favoritesIdsSet,
         setTheme: setAndSaveTheme,
         setIsLoading,
         setRadioStations,
@@ -121,6 +157,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         setViewedStation,
         setIsPlaying,
         setPlayError,
+        addFavorite,
       }}
     >
       <div data-theme={theme}>{children}</div>

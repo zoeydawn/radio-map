@@ -54,7 +54,7 @@ const StationList: React.FC<UserInfoProps> = ({
               </div>
             </div>
 
-            <LikeButton />
+            <LikeButton station={station} />
 
             <PlayButton station={station} />
           </li>

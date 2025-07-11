@@ -46,7 +46,7 @@ const StationModel: React.FC = ({}) => {
         <div className="divider"></div>
 
         <div className="flex items-center justify-between w-full pt-2.5">
-          <LikeButton />
+          <LikeButton station={viewedStation} />
           <PlayButton station={viewedStation} />
           <button
             className="btn btn-square btn-ghost mt-1.5"

@@ -13,6 +13,8 @@ export interface AppContextProps {
   viewedStation: Station | null
   isPlaying: boolean
   playError: string
+  favorites: Station[]
+  favoritesIdsSet: Set<string>
   setTheme: (theme: Theme) => void
   setIsLoading: (isLoading: boolean) => void
   setRadioStations: (stations: Station[]) => void
@@ -22,4 +24,5 @@ export interface AppContextProps {
   setViewedStation: (station: Station | null) => void
   setIsPlaying: (isPlaying: boolean) => void
   setPlayError: (error: string) => void
+  addFavorite: (station: Station) => void
 }

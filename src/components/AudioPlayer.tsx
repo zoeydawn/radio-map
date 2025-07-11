@@ -106,7 +106,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         )}
 
         <div className="flex items-center justify-between w-full max-w-150">
-          <LikeButton />
+          <LikeButton station={station} />
 
           {/* play/pause button */}
           <PlayButton station={station} />
