@@ -31,13 +31,39 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [theme, setTheme] = useState<Theme>('dark')
-  const [isLoading, setIsLoading] = useState<boolean>(true) // when initially fetching stations by geographic possition 
-  const [radioStations, setRadioStations] = useState<Station[]>([]) // stations by geographic possition 
+  const [isLoading, setIsLoading] = useState<boolean>(true) // when initially fetching stations by geographic possition
+  const [radioStations, setRadioStations] = useState<Station[]>([]) // stations by geographic possition
   const [viewState, setViewState] = useState<ViewState>(initialViewState) // view state for the map
   const [selectedStation, setSelectedStation] = useState<Station | null>(null) // station to be played
-  const [viewedStation, setViewedStation] = useState<Station | null>(null) // station to view details of 
+  const [viewedStation, setViewedStation] = useState<Station | null>(null) // station to view details of
   const [isPlaying, setIsPlaying] = useState<boolean>(true)
   const [playError, setPlayError] = useState('')
+
+  // save theme to local storage and update state
+  const setAndSaveTheme = (theme: Theme) => {
+    // save theme to local storage
+    setTheme(theme)
+
+    try {
+      localStorage.setItem('theme', theme)
+      // console.log('Theme saved successfully!')
+    } catch (error) {
+      console.error('Error saving theme to local storage:', error)
+    }
+  }
+
+  // read theme to local storage and update state
+  const readAndSaveTheme = () => {
+    try {
+      const savedTheme = localStorage.getItem('theme')
+
+      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+        setTheme(savedTheme)
+      }
+    } catch (error) {
+      console.error('Error reading theme from local storage:', error)
+    }
+  }
 
   // add new stations to the state without removing old ones
   // because we want new new stations to appear while moving the map, without deleting the old ones.
@@ -69,6 +95,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
   // Fetch data when the provider mounts
   useEffect(() => {
+    // read theme from local storage and update state accordingly
+    readAndSaveTheme()
+
     getStationsByLatAndLong(viewState.latitude, viewState.longitude)
   }, []) // Empty dependency array means this runs once on mount
 
@@ -83,7 +112,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         viewedStation,
         isPlaying,
         playError,
-        setTheme,
+        setTheme: setAndSaveTheme,
         setIsLoading,
         setRadioStations,
         setViewState,
