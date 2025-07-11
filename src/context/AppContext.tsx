@@ -66,19 +66,35 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
-  // add station to favorites and update localstorage
-  const addFavorite = (station: Station) => {
-    const updatedFavorites = [...favorites, station]
-    setFavorites(updatedFavorites)
+  // save favorites to state and local storage
+  const saveFavorites = (newFavorites: Station[]) => {
+    // save to state
+    setFavorites(newFavorites)
 
     // save local storage
     try {
-      const stringifiedFavorites = JSON.stringify(updatedFavorites)
+      const stringifiedFavorites = JSON.stringify(newFavorites)
       localStorage.setItem('favorites', stringifiedFavorites)
       // console.log('Theme saved successfully!')
     } catch (error) {
       console.error('Error saving favorites to local storage:', error)
     }
+  }
+
+  // add station to favorites
+  const addFavorite = (station: Station) => {
+    const updatedFavorites = [...favorites, station]
+
+    saveFavorites(updatedFavorites)
+  }
+
+  // remove station from favorites
+  const removeFavorite = (stationToRemove: Station) => {
+    const updatedFavorites = favorites.filter(
+      (station) => station.id !== stationToRemove.id,
+    )
+
+    saveFavorites(updatedFavorites)
   }
 
   // read theme to local storage and update state
@@ -158,6 +174,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         setIsPlaying,
         setPlayError,
         addFavorite,
+        removeFavorite,
       }}
     >
       <div data-theme={theme}>{children}</div>

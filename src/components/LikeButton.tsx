@@ -7,12 +7,12 @@ interface LikeButtonProps {
 }
 
 const LikeButton: React.FC<LikeButtonProps> = ({ station }) => {
-  const { favoritesIdsSet, addFavorite } = useAppContext()
+  const { favoritesIdsSet, addFavorite, removeFavorite } = useAppContext()
   const isAlreadyInFavorites = favoritesIdsSet.has(station.id)
 
   const handleClick = () => {
     if (isAlreadyInFavorites) {
-      // remove from favorites
+      removeFavorite(station)
     } else {
       addFavorite(station)
     }

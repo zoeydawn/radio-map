@@ -25,4 +25,5 @@ export interface AppContextProps {
   setIsPlaying: (isPlaying: boolean) => void
   setPlayError: (error: string) => void
   addFavorite: (station: Station) => void
+  removeFavorite: (station: Station) => void
 }
