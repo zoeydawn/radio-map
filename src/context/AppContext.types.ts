@@ -12,6 +12,7 @@ export interface AppContextProps {
   selectedStation: Station | null
   viewedStation: Station | null
   isPlaying: boolean
+  playError: string
   setTheme: (theme: Theme) => void
   setIsLoading: (isLoading: boolean) => void
   setRadioStations: (stations: Station[]) => void
@@ -20,4 +21,5 @@ export interface AppContextProps {
   setSelectedStation: (station: Station | null) => void
   setViewedStation: (station: Station | null) => void
   setIsPlaying: (isPlaying: boolean) => void
+  setPlayError: (error: string) => void
 }

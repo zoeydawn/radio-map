@@ -10,14 +10,21 @@ interface PlayButtonProps {
 }
 
 const PlayButton: React.FC<PlayButtonProps> = ({ station }) => {
-  const { isPlaying, setIsPlaying, selectedStation, setSelectedStation } =
-    useAppContext()
+  const {
+    isPlaying,
+    setIsPlaying,
+    selectedStation,
+    setSelectedStation,
+    setPlayError,
+  } = useAppContext()
 
   const isCurrentStationSelected =
     selectedStation && station.id === selectedStation.id
   const isCurrentStationPlaying = isCurrentStationSelected && isPlaying
 
   const togglePlayPause = () => {
+    setPlayError('')
+
     if (isCurrentStationSelected) {
       setIsPlaying(!isPlaying)
     } else {

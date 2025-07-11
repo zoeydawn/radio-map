@@ -12,6 +12,8 @@ const AudioPlayerWrapper: React.FC = () => {
     isPlaying,
     setIsPlaying,
     setViewedStation,
+    playError,
+    setPlayError,
   } = useAppContext()
   // console.log('selectedStation in AudioPlayerWrapper:', selectedStation)
 
@@ -24,6 +26,8 @@ const AudioPlayerWrapper: React.FC = () => {
           isPlaying={isPlaying}
           setIsPlaying={setIsPlaying}
           setViewedStation={setViewedStation}
+          playError={playError}
+          setPlayError={setPlayError}
         />
       )}
     </>

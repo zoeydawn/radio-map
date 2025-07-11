@@ -8,8 +8,10 @@ interface AudioPlayerProps {
   station: Station // The URL of the MP3 file
   handleClose: () => void
   isPlaying: boolean
+  playError: string
   setIsPlaying: (value: boolean) => void
   setViewedStation: (station: Station | null) => void
+  setPlayError: (error: string) => void
   autoPlay?: boolean // Whether the audio should autoplay (defaults to true)
   loop?: boolean // Whether the audio should loop (defaults to false)
 }
@@ -19,6 +21,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   isPlaying,
   setIsPlaying,
   setViewedStation,
+  playError,
+  setPlayError,
   autoPlay = true,
   loop = false,
 }) => {
@@ -33,8 +37,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       if (autoPlay) {
         audioRef.current.play().catch((error) => {
           console.error('Autoplay failed:', error)
-          // TODO: Inform the user that autoplay might be blocked
-          // display an error message in the player view
+
+          setPlayError(error)
+          setIsPlaying(false)
         })
       }
 
@@ -52,7 +57,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         audio.removeEventListener('ended', handleEnded)
       }
     }
-  }, [autoPlay, station.id, setIsPlaying]) // Re-run if either autoPlay or station prop changes
+  }, [autoPlay, station.id, setIsPlaying, setPlayError]) // Re-run if either autoPlay or station prop changes
 
   // so autoRef will respond to isPlaying
   useEffect(() => {
@@ -62,11 +67,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       } else {
         audioRef.current.play().catch((error) => {
           console.error('Play failed:', error)
-          // TODO: Handle cases where play might be blocked (e.g., by browser policies)
+
+          setPlayError(error) // Handle cases where play might be blocked (e.g., by browser policies)
+          setIsPlaying(false)
         })
       }
     }
-  }, [isPlaying])
+  }, [isPlaying, setPlayError, setIsPlaying])
 
   // Helper to format time
   const formatTime = (seconds: number) => {
@@ -91,6 +98,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         >
           {station.name}
         </h3>
+
+        {!!playError && (
+          <div className="text-error">
+            Sorry, we are unable to stream that station right now.
+          </div>
+        )}
 
         <div className="flex items-center justify-between w-full max-w-150">
           <LikeButton />
