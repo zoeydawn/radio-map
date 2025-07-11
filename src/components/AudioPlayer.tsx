@@ -100,7 +100,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         </h3>
 
         {!!playError && (
-          <div className="text-error">
+          <div className="text-error text-center">
             Sorry, we are unable to stream that station right now.
           </div>
         )}

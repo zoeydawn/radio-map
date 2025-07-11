@@ -36,6 +36,9 @@ export default function Navbar() {
               <Link href="/stations">List</Link>
             </li>
             <li>
+              <Link href="/favorites">Favorites</Link>
+            </li>
+            <li>
               <a>Search</a>
             </li>
             <li>
