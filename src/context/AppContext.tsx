@@ -123,7 +123,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   // TODO: Prevent redundant fetching - don't fetch new stations if the lat and lon hasn't changed much.
   const getStationsByLatAndLong = async (lat: number, lon: number) => {
     // TODO: add error logic
-    setIsLoading(true)
     // setError(null);
     try {
       const data = await stationsByGeographicArea(lat, lon)
@@ -139,11 +138,20 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
+  // for when we can't estimate the location, we show the default
+  const getStationsByDefaultView = () => {
+    getStationsByLatAndLong(viewState.latitude, viewState.longitude)
+  }
+
   // fetch the estimated user location so that we can show their city on the map
   const getEstimatedLatAndLon = async () => {
     try {
       const userLocation: UserLocationType = await fetchEstimatedUserLocation()
       console.info('userLocation:', userLocation)
+      if (!userLocation) {
+        return
+      }
+
       const longitude = userLocation.location.lng
       const latitude = userLocation.location.lat
 
@@ -155,23 +163,30 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
   // actions that have to be run asyncrounosly on mount
   const initialAsyncFunctions = async () => {
+    setIsLoading(true)
     const clientLocation = await getEstimatedLatAndLon()
-    if (clientLocation) {
+
+    if (
+      !clientLocation ||
+      (!clientLocation.latitude && !clientLocation.longitude)
+    ) {
+      getStationsByDefaultView() // use the default location if we can't estimate the user's location
+    } else {
       const { longitude, latitude } = clientLocation
 
-      if (longitude && latitude) {
-        await getStationsByLatAndLong(latitude, longitude)
+      await getStationsByLatAndLong(latitude, longitude)
 
-        setViewState({
-          longitude,
-          latitude,
-          zoom: 8.5,
-          bearing: 0,
-          pitch: 0,
-          padding: {},
-        })
-      }
+      setViewState({
+        longitude,
+        latitude,
+        zoom: 8.5,
+        bearing: 0,
+        pitch: 0,
+        padding: {},
+      })
     }
+
+    setIsLoading(false)
   }
 
   // Fetch data when the provider mounts
