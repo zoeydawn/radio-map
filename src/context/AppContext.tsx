@@ -7,14 +7,15 @@ import React, {
   ReactNode,
   useEffect,
 } from 'react'
-import { AppContextProps, Theme } from './AppContext.types'
+import { AppContextProps, Theme, UserLocationType } from './AppContext.types'
 import { ViewState } from 'react-map-gl/mapbox'
 import { stationsByGeographicArea } from '@/services/radioBrowserService'
 import { Station } from 'radio-browser-api'
 import { removeDuplicatesById } from '@/utils/radioStations'
+import { fetchEstimatedUserLocation } from '@/services/ipifyService'
 
 const initialViewState: ViewState = {
-  longitude: -73.7,
+  longitude: -73.7, // default to Montreal
   latitude: 45.5,
   zoom: 8.5,
   bearing: 0,
@@ -138,13 +139,48 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   }
 
+  // fetch the estimated user location so that we can show their city on the map
+  const getEstimatedLatAndLon = async () => {
+    try {
+      const userLocation: UserLocationType = await fetchEstimatedUserLocation()
+      console.info('userLocation:', userLocation)
+      const longitude = userLocation.location.lng
+      const latitude = userLocation.location.lat
+
+      return { longitude, latitude }
+    } catch (error) {
+      console.error('error getting userLocation ip address:', error)
+    }
+  }
+
+  // actions that have to be run asyncrounosly on mount
+  const initialAsyncFunctions = async () => {
+    const clientLocation = await getEstimatedLatAndLon()
+    if (clientLocation) {
+      const { longitude, latitude } = clientLocation
+
+      if (longitude && latitude) {
+        await getStationsByLatAndLong(latitude, longitude)
+
+        setViewState({
+          longitude,
+          latitude,
+          zoom: 8.5,
+          bearing: 0,
+          pitch: 0,
+          padding: {},
+        })
+      }
+    }
+  }
+
   // Fetch data when the provider mounts
   useEffect(() => {
-    // read theme from local storage and update state accordingly
+    // read from local storage and update state accordingly
     readAndSaveTheme()
     readAndSaveFavorites()
 
-    getStationsByLatAndLong(viewState.latitude, viewState.longitude)
+    initialAsyncFunctions()
   }, []) // Empty dependency array means this runs once on mount
 
   // a set containing the ids of the stations in favorites
