@@ -1,33 +1,71 @@
+// TODO: delete this file. It's only for reference 
 'use client'
 
 import React, { useEffect, useRef } from 'react'
-import mapboxgl from 'mapbox-gl'
+import mapboxgl, {
+  Map,
+  GeoJSONSource,
+  Popup,
+  MapMouseEvent,
+  LngLatLike,
+  StyleSpecification,
+} from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
-const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
+// Ensure your Mapbox token is correctly configured in your .env.local file
+// NEXT_PUBLIC_MAPBOX_TOKEN="YOUR_MAPBOX_ACCESS_TOKEN"
+const MAPBOX_TOKEN: string | undefined = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
-const MapWithClusters = () => {
-  const mapContainerRef = useRef()
-  const mapRef = useRef()
+const MapWithClusters: React.FC = () => {
+  const mapContainerRef = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<Map | null>(null)
 
   useEffect(() => {
+    if (!MAPBOX_TOKEN) {
+      console.error(
+        'Mapbox token is not defined. Please set NEXT_PUBLIC_MAPBOX_TOKEN in your environment variables.',
+      )
+      return
+    }
+
     mapboxgl.accessToken = MAPBOX_TOKEN
 
-    mapRef.current = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/standard',
-      config: {
-        basemap: {
-          theme: 'monochrome',
-          lightPreset: 'night',
+    // Initialize the map only if mapRef.current is null to prevent re-initialization
+    if (mapRef.current) return
+
+    const map = new mapboxgl.Map({
+      container: mapContainerRef.current!,
+      // UPDATED STYLE OBJECT: Added the 'glyphs' property
+      style: {
+        version: 8,
+        name: 'Dark Map',
+        metadata: {
+          'mapbox:autocomposite': true,
+          'mapbox:type': 'template',
+          'mapbox:sdk_support': {
+            js: '1.14.0',
+            android: '10.0.0',
+            ios: '10.0.0',
+          },
+          'mapbox:config': {
+            basemap: {
+              theme: 'monochrome',
+              lightPreset: 'night',
+            },
+          },
         },
-      },
+        sources: {},
+        layers: [],
+        glyphs: 'mapbox://fonts/{fontstack}/{range}.pbf', // THIS LINE WAS ADDED/FIXED
+      } as StyleSpecification,
       center: [-103.5917, 40.6699],
       zoom: 3,
     })
 
-    mapRef.current.on('load', () => {
-      mapRef.current.addSource('earthquakes', {
+    mapRef.current = map
+
+    map.on('load', () => {
+      map.addSource('earthquakes', {
         type: 'geojson',
         generateId: true,
         data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson',
@@ -36,7 +74,7 @@ const MapWithClusters = () => {
         clusterRadius: 50,
       })
 
-      mapRef.current.addLayer({
+      map.addLayer({
         id: 'clusters',
         type: 'circle',
         source: 'earthquakes',
@@ -64,7 +102,7 @@ const MapWithClusters = () => {
         },
       })
 
-      mapRef.current.addLayer({
+      map.addLayer({
         id: 'cluster-count',
         type: 'symbol',
         source: 'earthquakes',
@@ -76,7 +114,7 @@ const MapWithClusters = () => {
         },
       })
 
-      mapRef.current.addLayer({
+      map.addLayer({
         id: 'unclustered-point',
         type: 'circle',
         source: 'earthquakes',
@@ -91,84 +129,73 @@ const MapWithClusters = () => {
       })
 
       // inspect a cluster on click
-      mapRef.current.addInteraction('click-clusters', {
-        type: 'click',
-        target: { layerId: 'clusters' },
-        handler: (e) => {
-          const features = mapRef.current.queryRenderedFeatures(e.point, {
-            layers: ['clusters'],
-          })
-          const clusterId = features[0].properties.cluster_id
-          mapRef.current
-            .getSource('earthquakes')
-            .getClusterExpansionZoom(clusterId, (err, zoom) => {
-              if (err) return
+      map.on('click', 'clusters', (e: MapMouseEvent) => {
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: ['clusters'],
+        })
+        const clusterId = (features[0].properties as { cluster_id: number })
+          .cluster_id
+        ;(
+          map.getSource('earthquakes') as GeoJSONSource
+        ).getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (err) return
 
-              mapRef.current.easeTo({
-                center: features[0].geometry.coordinates,
-                zoom: zoom,
-              })
-            })
-        },
+          map.easeTo({
+            center: (features[0].geometry as GeoJSON.Point)
+              .coordinates as LngLatLike,
+            zoom: zoom,
+          })
+        })
       })
 
       // When a click event occurs on a feature in
       // the unclustered-point layer, open a popup at
       // the location of the feature, with
       // description HTML from its properties.
-      mapRef.current.addInteraction('click-unclustered', {
-        type: 'click',
-        target: { layerId: 'unclustered-point' },
-        handler: (e) => {
-          const coordinates = e.feature.geometry.coordinates.slice()
-          const mag = e.feature.properties.mag
-          const tsunami = e.feature.properties.tsunami === 1 ? 'yes' : 'no'
+      map.on('click', 'unclustered-point', (e: MapMouseEvent) => {
+        const coordinates = (
+          e.features![0].geometry as GeoJSON.Point
+        ).coordinates.slice()
+        const mag = (e.features![0].properties as { mag: number }).mag
+        const tsunami =
+          (e.features![0].properties as { tsunami: number }).tsunami === 1
+            ? 'yes'
+            : 'no'
 
-          new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            .setHTML(`magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`)
-            .addTo(mapRef.current)
-        },
+        new Popup()
+          .setLngLat(coordinates as LngLatLike)
+          .setHTML(`magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`)
+          .addTo(map)
       })
 
       // Change the cursor to a pointer when the mouse is over a cluster of POIs.
-      mapRef.current.addInteraction('clustered-mouseenter', {
-        type: 'mouseenter',
-        target: { layerId: 'clusters' },
-        handler: () => {
-          mapRef.current.getCanvas().style.cursor = 'pointer'
-        },
+      map.on('mouseenter', 'clusters', () => {
+        map.getCanvas().style.cursor = 'pointer'
       })
 
       // Change the cursor back to a pointer when it stops hovering over a cluster of POIs.
-      mapRef.current.addInteraction('clustered-mouseleave', {
-        type: 'mouseleave',
-        target: { layerId: 'clusters' },
-        handler: () => {
-          mapRef.current.getCanvas().style.cursor = ''
-        },
+      map.on('mouseleave', 'clusters', () => {
+        map.getCanvas().style.cursor = ''
       })
 
       // Change the cursor to a pointer when the mouse is over an individual POI.
-      mapRef.current.addInteraction('unclustered-mouseenter', {
-        type: 'mouseenter',
-        target: { layerId: 'unclustered-point' },
-        handler: () => {
-          mapRef.current.getCanvas().style.cursor = 'pointer'
-        },
+      map.on('mouseenter', 'unclustered-point', () => {
+        map.getCanvas().style.cursor = 'pointer'
       })
 
       // Change the cursor back to a pointer when it stops hovering over an individual POI.
-      mapRef.current.addInteraction('unclustered-mouseleave', {
-        type: 'mouseleave',
-        target: { layerId: 'unclustered-point' },
-        handler: () => {
-          mapRef.current.getCanvas().style.cursor = ''
-        },
+      map.on('mouseleave', 'unclustered-point', () => {
+        map.getCanvas().style.cursor = ''
       })
     })
 
-    return () => mapRef.current.remove()
+    // Clean up map on unmount
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove()
+        mapRef.current = null
+      }
+    }
   }, [])
 
   return (
