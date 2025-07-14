@@ -11,7 +11,7 @@ export const stationsByGeographicArea = async (
     geo_long,
     hasGeoInfo: true,
     geo_distance: 250000,
-    limit: 100,
+    // limit: 100,
   })
   // console.log({ response, geo_lat, geo_long })
 

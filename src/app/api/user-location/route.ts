@@ -20,10 +20,10 @@ export async function GET(request: NextRequest) {
   }
 
   // for development purposes only!
-  if (clientIp === '::ffff:127.0.0.1') {
+  // if (clientIp === '::ffff:127.0.0.1') {
     // clientIp = '8.8.8.8'
-    clientIp = undefined
-  }
+    // clientIp = undefined
+  // }
 
   if (clientIp) {
     // Return a standard Web Response object

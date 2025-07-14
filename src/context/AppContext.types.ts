@@ -3,6 +3,8 @@ import { ViewState } from 'react-map-gl/mapbox'
 
 export type Theme = 'light' | 'dark'
 
+export type Possition = { lat: number; lon: number }
+
 export type UserLocationType = {
   ip: string
   location: {
@@ -31,6 +33,7 @@ export interface AppContextProps {
   isLoading: boolean
   radioStations: Station[]
   viewState: ViewState
+  previousPossition: Possition
   selectedStation: Station | null
   viewedStation: Station | null
   isPlaying: boolean

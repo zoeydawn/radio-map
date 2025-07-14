@@ -7,12 +7,18 @@ import React, {
   ReactNode,
   useEffect,
 } from 'react'
-import { AppContextProps, Theme, UserLocationType } from './AppContext.types'
+import {
+  AppContextProps,
+  Possition,
+  Theme,
+  UserLocationType,
+} from './AppContext.types'
 import { ViewState } from 'react-map-gl/mapbox'
 import { stationsByGeographicArea } from '@/services/radioBrowserService'
 import { Station } from 'radio-browser-api'
 import { removeDuplicatesById } from '@/utils/radioStations'
 import { fetchEstimatedUserLocation } from '@/services/ipifyService'
+import { areLocationsWithin50Km } from '@/utils/map'
 
 const initialViewState: ViewState = {
   longitude: -73.7, // default to Montreal
@@ -35,6 +41,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true) // when initially fetching stations by geographic possition
   const [radioStations, setRadioStations] = useState<Station[]>([]) // stations by geographic possition
   const [viewState, setViewState] = useState<ViewState>(initialViewState) // view state for the map
+  const [previousPossition, setPreviousPossition] = useState<Possition>({
+    lat: 0,
+    lon: 0,
+  }) // keep track of the last possition from where we fetched station so that we can compare it against the current possition
   const [selectedStation, setSelectedStation] = useState<Station | null>(null) // station to be played
   const [viewedStation, setViewedStation] = useState<Station | null>(null) // station to view details of
   const [isPlaying, setIsPlaying] = useState<boolean>(true)
@@ -120,14 +130,26 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setRadioStations(newStationArray)
   }
 
-  // TODO: Prevent redundant fetching - don't fetch new stations if the lat and lon hasn't changed much.
   const getStationsByLatAndLong = async (lat: number, lon: number) => {
     // TODO: add error logic
-    // setError(null);
-    try {
-      const data = await stationsByGeographicArea(lat, lon)
 
-      addNewRadioStations(data)
+    try {
+      // make sure map has moved significatly before fetching
+      if (
+        areLocationsWithin50Km(
+          lat,
+          lon,
+          previousPossition.lat,
+          previousPossition.lon,
+        )
+      ) {
+        console.log('not fetching more stations, map hasnt moved enough')
+      } else {
+        const data = await stationsByGeographicArea(lat, lon)
+
+        addNewRadioStations(data)
+        setPreviousPossition({ lat, lon })
+      }
     } catch (error) {
       // TODO: error handling logic
       // setError(err.message || 'Failed to fetch stations');
@@ -209,6 +231,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         isLoading,
         radioStations,
         viewState,
+        previousPossition,
         selectedStation,
         viewedStation,
         isPlaying,
