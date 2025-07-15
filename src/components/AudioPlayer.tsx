@@ -6,21 +6,9 @@ import LikeButton from './LikeButton'
 import Hls from 'hls.js'
 import { useAppContext } from '@/context/AppContext'
 
-const AudioPlayer: React.FC = (
-  {
-    // selectedStation,
-    // isPlaying,
-    // setIsPlaying,
-    // setViewedStation,
-    // playError,
-    // setPlayError,
-    // autoPlay = true,
-    // loop = false,
-  },
-) => {
+const AudioPlayer: React.FC = () => {
   const {
     selectedStation,
-    // setSelectedStation,
     isPlaying,
     setIsPlaying,
     setViewedStation,
@@ -31,14 +19,13 @@ const AudioPlayer: React.FC = (
   const hlsInstanceRef = useRef<Hls | null>(null) // To store the hls.js instance
   const [currentTime, setCurrentTime] = useState(0)
 
-  // const { urlResolved } = station
   const urlResolved = selectedStation?.urlResolved
 
   // Effect to handle autoplay and initial loading
   useEffect(() => {
     if (audioRef.current) {
-      // Event listeners for updating state
       const audio = audioRef.current
+      // Event listeners for updating state
       const handleTimeUpdate = () => setCurrentTime(audio.currentTime)
       const handleEnded = () => setIsPlaying(false)
 
@@ -47,7 +34,7 @@ const AudioPlayer: React.FC = (
 
       // Check if the URL is an HLS (.m3u8) stream
       if (urlResolved?.endsWith('.m3u8')) {
-        console.log('playing a .m3u8 stream!')
+        // console.log('playing a .m3u8 stream!')
         if (Hls.isSupported()) {
           const hls = new Hls()
           hlsInstanceRef.current = hls // Store the instance
@@ -120,10 +107,7 @@ const AudioPlayer: React.FC = (
 
   // so autoRef will respond to isPlaying
   useEffect(() => {
-    // console.log('in useEffect (line 128)')
-    // console.log('isPlaying:', isPlaying)
     if (audioRef.current) {
-      // console.log('audioRef.current.src:', audioRef.current.src)
       if (!isPlaying) {
         audioRef.current.pause()
       } else {
@@ -151,14 +135,7 @@ const AudioPlayer: React.FC = (
   return (
     <div className="fixed bottom-0 left-0 w-full bg-neutral">
       <div className="flex flex-col items-center space-y-4 p-3">
-        <audio
-          ref={audioRef}
-          // src={urlResolved}
-          // loop={loop}
-          // autoPlay={true}
-          preload="metadata"
-          className="hidden"
-        />
+        <audio ref={audioRef} preload="metadata" className="hidden" />
         <h3
           onClick={() => setViewedStation(selectedStation)}
           className="font-bold text-lg link link-hover"
