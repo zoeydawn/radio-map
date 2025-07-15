@@ -69,7 +69,7 @@ export default function WorldMap() {
     const clusterId = feature.properties.cluster_id
 
     const mapboxSource = mapRef.current.getSource(
-      'earthquakes',
+      'radio stations',
     ) as GeoJSONSource
 
     mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
@@ -151,7 +151,11 @@ export default function WorldMap() {
           // data="https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"
           data={{
             type: 'FeatureCollection',
-            features: sourceData,
+            features: {
+              
+            }
+            // features: sourceData,
+            // properties: ''
           }}
           cluster={true}
           clusterMaxZoom={14}
