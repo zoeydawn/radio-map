@@ -18,19 +18,15 @@ const AudioPlayerWrapper: React.FC = () => {
   // console.log('selectedStation in AudioPlayerWrapper:', selectedStation)
 
   return (
-    <>
-      {selectedStation && (
-        <AudioPlayer
-          station={selectedStation}
-          handleClose={() => setSelectedStation(null)}
-          isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
-          setViewedStation={setViewedStation}
-          playError={playError}
-          setPlayError={setPlayError}
-        />
-      )}
-    </>
+    <AudioPlayer
+      station={selectedStation}
+      handleClose={() => setSelectedStation(null)}
+      isPlaying={isPlaying}
+      setIsPlaying={setIsPlaying}
+      setViewedStation={setViewedStation}
+      playError={playError}
+      setPlayError={setPlayError}
+    />
   )
 }
 

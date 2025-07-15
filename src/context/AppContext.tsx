@@ -47,7 +47,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   }) // keep track of the last possition from where we fetched station so that we can compare it against the current possition
   const [selectedStation, setSelectedStation] = useState<Station | null>(null) // station to be played
   const [viewedStation, setViewedStation] = useState<Station | null>(null) // station to view details of
-  const [isPlaying, setIsPlaying] = useState<boolean>(true)
+  const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [playError, setPlayError] = useState('')
   const [favorites, setFavorites] = useState<Station[]>([]) // stations by geographic possition
 
