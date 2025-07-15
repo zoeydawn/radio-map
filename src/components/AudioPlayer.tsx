@@ -1,38 +1,38 @@
-import { Station } from 'radio-browser-api'
+'use client' // required for any component file that consumes the context.
+
 import React, { useRef, useEffect, useState } from 'react'
 import PlayButton from './PlayButton'
 import LikeButton from './LikeButton'
 import Hls from 'hls.js'
+import { useAppContext } from '@/context/AppContext'
 
-// Define the props for the AudioPlayer component
-interface AudioPlayerProps {
-  station: Station | null
-  handleClose: () => void
-  isPlaying: boolean
-  playError: string
-  setIsPlaying: (value: boolean) => void
-  setViewedStation: (station: Station | null) => void
-  setPlayError: (error: string) => void
-  // autoPlay?: boolean // Whether the audio should autoplay (defaults to true)
-  // loop?: boolean // Whether the audio should loop (defaults to false)
-}
-
-const AudioPlayer: React.FC<AudioPlayerProps> = ({
-  station,
-  isPlaying,
-  setIsPlaying,
-  setViewedStation,
-  playError,
-  setPlayError,
-  // autoPlay = true,
-  // loop = false,
-}) => {
+const AudioPlayer: React.FC = (
+  {
+    // selectedStation,
+    // isPlaying,
+    // setIsPlaying,
+    // setViewedStation,
+    // playError,
+    // setPlayError,
+    // autoPlay = true,
+    // loop = false,
+  },
+) => {
+  const {
+    selectedStation,
+    // setSelectedStation,
+    isPlaying,
+    setIsPlaying,
+    setViewedStation,
+    playError,
+    setPlayError,
+  } = useAppContext()
   const audioRef = useRef<HTMLAudioElement>(null)
   const hlsInstanceRef = useRef<Hls | null>(null) // To store the hls.js instance
   const [currentTime, setCurrentTime] = useState(0)
 
   // const { urlResolved } = station
-  const urlResolved = station?.urlResolved
+  const urlResolved = selectedStation?.urlResolved
 
   // Effect to handle autoplay and initial loading
   useEffect(() => {
@@ -116,7 +116,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         audio.src = '' // Ensure source is cleared
       }
     }
-  }, [station, urlResolved, setIsPlaying, setPlayError]) // Re-run if station prop changes
+  }, [selectedStation, urlResolved, setIsPlaying, setPlayError]) // Re-run if station prop changes
 
   // so autoRef will respond to isPlaying
   useEffect(() => {
@@ -144,7 +144,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`
   }
 
-  if (!station) {
+  if (!selectedStation) {
     return null
   }
 
@@ -160,10 +160,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           className="hidden"
         />
         <h3
-          onClick={() => setViewedStation(station)}
+          onClick={() => setViewedStation(selectedStation)}
           className="font-bold text-lg link link-hover"
         >
-          {station.name}
+          {selectedStation.name}
         </h3>
 
         {!!playError && (
@@ -173,10 +173,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         )}
 
         <div className="flex items-center justify-between w-full max-w-150">
-          <LikeButton station={station} />
+          <LikeButton station={selectedStation} />
 
           {/* play/pause button */}
-          <PlayButton station={station} />
+          <PlayButton station={selectedStation} />
 
           <div className="text-gray-700 text-sm font-mono">
             {formatTime(currentTime)}{' '}
