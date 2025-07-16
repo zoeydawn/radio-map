@@ -1,6 +1,5 @@
 'use client'
 
-import Loader from '@/components/Loader'
 import StationList from '@/components/StationList'
 import WorldMap from '@/components/WorldMap'
 import { useAppContext } from '@/context/AppContext'
@@ -69,9 +68,9 @@ export default function Home() {
           stations={radioStations}
           setViewedStation={setViewedStation}
           header="Stations near you"
+          isLoading={isLoading}
         />
       )}
-      {isLoading && <Loader />}
     </>
   )
 }

@@ -4,17 +4,20 @@ import { Station } from 'radio-browser-api'
 import * as React from 'react'
 import PlayButton from './PlayButton'
 import LikeButton from './LikeButton'
+import Loader from './Loader'
 
 interface UserInfoProps {
   stations: Station[]
   setViewedStation: (station: Station) => void
   header?: string
+  isLoading?: boolean
 }
 
 const StationList: React.FC<UserInfoProps> = ({
   stations,
   header,
   setViewedStation,
+  isLoading
 }) => {
   return (
     <ul className="list bg-base-100 rounded-box shadow-md max-w-150 m-auto mt-4">
@@ -60,6 +63,9 @@ const StationList: React.FC<UserInfoProps> = ({
           </li>
         )
       })}
+      <li>
+        {isLoading && <Loader />}
+      </li>
     </ul>
   )
 }
