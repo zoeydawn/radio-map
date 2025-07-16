@@ -3,17 +3,36 @@
 
 import StationInfo from '@/components/StationInfo'
 import { stationsById } from '@/services/radioBrowserService'
+import { simpleStationDiscription } from '@/utils/radioStations'
+import { Metadata } from 'next'
 
-interface ItemPageProps {
+interface StationPageProps {
   params: {
     stationId: string // This matches the folder name [stationId]
   }
 }
 
-export default async function ItemPage({ params }: ItemPageProps) {
-  const { stationId } = params
+// generateMetadata function to dynamically set page title and other metadata
+export async function generateMetadata({
+  params,
+}: StationPageProps): Promise<Metadata> {
+  const stationArray = (await stationsById(params.stationId)) || []
+  const station = stationArray[0]
 
-  const stationArray = (await stationsById(stationId)) || []
+  if (!station) {
+    return {
+      title: 'Station Not Found', // Default title if item is not found
+    }
+  }
+
+  return {
+    title: station.name, // Set the page title to the item's name
+    description: simpleStationDiscription(station),
+  }
+}
+
+export default async function StationPage({ params }: StationPageProps) {
+  const stationArray = (await stationsById(params.stationId)) || []
   const station = stationArray[0]
 
   if (!station) {
