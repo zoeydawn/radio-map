@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar'
 import { AppProvider } from '@/context/AppContext'
 import StationModel from '@/components/StationModel'
 import AudioPlayer from '@/components/AudioPlayer'
+import PageWrapper from '@/components/PageWrapper'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,7 +34,7 @@ export default function RootLayout({
       >
         <AppProvider>
           <Navbar />
-          {children}
+          <PageWrapper>{children}</PageWrapper>
           <AudioPlayer />
           {/* <Footer /> */}
           <StationModel />
