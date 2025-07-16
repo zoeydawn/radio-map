@@ -13,18 +13,21 @@ import { useAppContext } from '../context/AppContext'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import Pins from './Pins'
 import Loader from './Loader'
+import { useMapContext } from '@/context/MapContext'
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
 export default function WorldMap() {
   const {
     theme,
+  } = useAppContext()
+  const {
     isLoading,
     viewState,
     setViewState,
     getStationsByLatAndLong,
     radioStations,
-  } = useAppContext()
+  } = useMapContext()
 
   const mapStyle =
     theme === 'dark'
