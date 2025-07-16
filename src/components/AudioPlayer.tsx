@@ -133,30 +133,32 @@ const AudioPlayer: React.FC = () => {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-neutral">
-      <div className="flex flex-col items-center space-y-4 p-3">
-        <audio ref={audioRef} preload="metadata" className="hidden" />
-        <h3
-          onClick={() => setViewedStation(selectedStation)}
-          className="font-bold text-lg link link-hover"
-        >
-          {selectedStation.name}
-        </h3>
+    <div className="fixed bottom-0 left-0 w-full flex flex-col items-center">
+      <div className="rounded-lg bg-base-100 border-base-300 w-full max-w-150">
+        <div className="flex flex-col items-center space-y-4 p-3">
+          <audio ref={audioRef} preload="metadata" className="hidden" />
+          <h3
+            onClick={() => setViewedStation(selectedStation)}
+            className="font-bold text-lg link link-hover"
+          >
+            {selectedStation.name}
+          </h3>
 
-        {!!playError && (
-          <div className="text-error text-center">
-            Sorry, we are unable to stream that station right now.
-          </div>
-        )}
+          {!!playError && (
+            <div className="text-error text-center">
+              Sorry, we are unable to stream that station right now.
+            </div>
+          )}
 
-        <div className="flex items-center justify-between w-full max-w-150">
-          <LikeButton station={selectedStation} />
+          <div className="flex items-center justify-between w-full">
+            <LikeButton station={selectedStation} />
 
-          {/* play/pause button */}
-          <PlayButton station={selectedStation} />
+            {/* play/pause button */}
+            <PlayButton station={selectedStation} />
 
-          <div className="text-gray-700 text-sm font-mono">
-            {formatTime(currentTime)}{' '}
+            <div className="text-gray-700 text-sm font-mono">
+              {formatTime(currentTime)}{' '}
+            </div>
           </div>
         </div>
       </div>
