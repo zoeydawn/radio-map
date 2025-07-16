@@ -1,5 +1,8 @@
 import { Theme } from '@/context/AppContext.types'
 
+export const externalLinkClass = (theme: Theme) =>
+  `${'link link-hover flex items-center pt-1 pb-1'} ${theme === 'dark' ? 'link-accent' : 'link-neutral'}`
+
 interface ExternalLinkProps {
   href: string
   rel: string
@@ -15,7 +18,7 @@ const ExternalLink: React.FC<ExternalLinkProps> = ({
 }) => {
   return (
     <a
-      className={`${'link link-hover flex items-center pt-1 pb-1'} ${theme === 'dark' ? 'link-accent' : 'link-neutral'}`}
+      className={externalLinkClass(theme)}
       target="_blank"
       href={href}
       rel={rel}

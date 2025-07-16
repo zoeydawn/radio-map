@@ -5,6 +5,7 @@ import PlayButton from './PlayButton'
 import LikeButton from './LikeButton'
 import ExternalLink from './ExternalLink'
 import { Theme } from '@/context/AppContext.types'
+import ShareButton from './ShareButton'
 
 interface UserInfoProps {
   station: Station
@@ -41,31 +42,34 @@ const StationInfo: React.FC<UserInfoProps> = ({
         label="Station Stream Link"
         theme={theme}
       />
+      <ShareButton station={station} theme={theme} />
 
       <div className="divider"></div>
 
       <div className="flex items-center justify-between w-full pt-2.5">
         <LikeButton station={station} />
         <PlayButton station={station} />
-        <button
-          className="btn btn-square btn-ghost mt-1.5"
-          onClick={handleClose}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
+        {!!handleClose && (
+          <button
+            className="btn btn-square btn-ghost mt-1.5"
+            onClick={handleClose}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18 18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        )}
       </div>
     </>
   )
