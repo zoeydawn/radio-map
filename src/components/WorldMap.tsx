@@ -1,12 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import Map, {
-  FullscreenControl,
-  GeolocateControl,
-  NavigationControl,
-  ScaleControl,
-} from 'react-map-gl/mapbox'
+import Map from 'react-map-gl/mapbox'
 
 import { useAppContext } from '../context/AppContext'
 
@@ -18,9 +13,7 @@ import { useMapContext } from '@/context/MapContext'
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
 export default function WorldMap() {
-  const {
-    theme,
-  } = useAppContext()
+  const { theme } = useAppContext()
   const {
     isLoading,
     viewState,
@@ -58,10 +51,6 @@ export default function WorldMap() {
         mapStyle={mapStyle}
         mapboxAccessToken={MAPBOX_TOKEN}
       >
-        <GeolocateControl position="top-left" />
-        <FullscreenControl position="top-left" />
-        <NavigationControl position="top-left" />
-        <ScaleControl />
         <Pins />
       </Map>
     </div>
