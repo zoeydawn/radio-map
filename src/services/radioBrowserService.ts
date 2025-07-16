@@ -1,6 +1,6 @@
 import { RadioBrowserApi } from 'radio-browser-api'
 
-const api = new RadioBrowserApi('My Radio App')
+const api = new RadioBrowserApi('Radio Map')
 
 export const stationsByGeographicArea = async (
   geo_lat: number,
@@ -13,6 +13,14 @@ export const stationsByGeographicArea = async (
     geo_distance: 250000,
     // limit: 100,
   })
+  // console.log({ response, geo_lat, geo_long })
+
+  return response || []
+}
+
+// stations by id
+export const stationsById = async (id: string) => {
+  const response = await api.getStationsById([id])
   // console.log({ response, geo_lat, geo_long })
 
   return response || []
