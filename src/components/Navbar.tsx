@@ -1,8 +1,7 @@
 import * as React from 'react'
-// import Link from 'next/link'
-
-import ThemeToggler from './ThemeToggler'
+import Link from 'next/link'
 import NavDrawer from './NavDrawer'
+import { HeartIcon } from './Icons'
 
 export default function Navbar() {
   return (
@@ -15,8 +14,10 @@ export default function Navbar() {
         <div className="navbar-center">
           <a className="btn btn-ghost text-xl">RadioMap</a>
         </div>
-        <div className="navbar-end">
-          <ThemeToggler />
+        <div className="navbar-end pr-2.5">
+          <Link className="link link-hover" href="/favorites">
+            <HeartIcon fill="currentColor" />
+          </Link>
         </div>
       </div>
     </div>

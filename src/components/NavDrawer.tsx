@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRef } from 'react'
 import { FlagIcon, HeartIcon, MapIcon, SearchIcon } from './Icons'
+import ThemeToggler from './ThemeToggler'
 
 const NavDrawer = () => {
   // Create a ref for the drawer checkbox input
@@ -80,6 +81,10 @@ const NavDrawer = () => {
             </Link>
           </li>
         </ul>
+
+        <div className="absolute bottom-2 p-6">
+          <ThemeToggler />
+        </div>
       </div>
     </div>
   )
