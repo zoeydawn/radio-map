@@ -7,15 +7,14 @@ import { simpleStationDiscription } from '@/utils/radioStations'
 import { Metadata } from 'next'
 
 interface StationPageProps {
-  params: {
+  params: Promise<{
     stationId: string // This matches the folder name [stationId]
-  }
+  }>
 }
 
 // generateMetadata function to dynamically set page title and other metadata
-export async function generateMetadata({
-  params,
-}: StationPageProps): Promise<Metadata> {
+export async function generateMetadata(props: StationPageProps): Promise<Metadata> {
+  const params = await props.params;
   const stationArray = (await stationsById(params.stationId)) || []
   const station = stationArray[0]
 
@@ -31,7 +30,8 @@ export async function generateMetadata({
   }
 }
 
-export default async function StationPage({ params }: StationPageProps) {
+export default async function StationPage(props: StationPageProps) {
+  const params = await props.params;
   const stationArray = (await stationsById(params.stationId)) || []
   const station = stationArray[0]
 
