@@ -21,7 +21,7 @@ const AppContext = createContext<AppContextProps | undefined>(undefined)
 export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [theme, setTheme] = useState<Theme>('dark')
+  const [theme, setTheme] = useState<Theme>('light') // light theme by default
   const [selectedStation, setSelectedStation] = useState<Station | null>(null) // station to be played
   const [viewedStation, setViewedStation] = useState<Station | null>(null) // station to view details of
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
@@ -63,7 +63,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     try {
       const stringifiedFavorites = JSON.stringify(newFavorites)
       localStorage.setItem('favorites', stringifiedFavorites)
-      // console.log('Theme saved successfully!')
     } catch (error) {
       console.error('Error saving favorites to local storage:', error)
     }
