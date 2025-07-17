@@ -25,9 +25,25 @@ export const stationsById = async (id: string) => {
   return response || []
 }
 
-// stations by id
+// stations by votes
 export const stationsByVotes = async () => {
   const response = await api.getStationsByVotes(150) // limit of 150
+  // console.log({ response })
+
+  return response || []
+}
+
+// countries
+export const countries = async () => {
+  const response = await api.getCountries()
+  // console.log({ response })
+
+  return response || []
+}
+
+// "states" by country
+export const states = async (countryName: string) => {
+  const response = await api.getCountryStates(countryName)
   // console.log({ response })
 
   return response || []

@@ -71,8 +71,12 @@ const NavDrawer = () => {
             </Link>
           </li>
           <li>
-            <Link className="link link-hover" href="/" onClick={closeDrawer}>
-              <FlagIcon /> Countries
+            <Link
+              className="link link-hover"
+              href="/places"
+              onClick={closeDrawer}
+            >
+              <FlagIcon /> Places
             </Link>
           </li>
           <li>
