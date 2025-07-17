@@ -1,2 +1,9 @@
 @import 'tailwindcss';
 @plugin "daisyui";
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0; /* Also good to zero out padding */
+}

@@ -7,10 +7,7 @@ import React, {
   ReactNode,
   useEffect,
 } from 'react'
-import {
-  AppContextProps,
-  Theme,
-} from './AppContext.types'
+import { AppContextProps, Theme } from './AppContext.types'
 import { Station } from 'radio-browser-api'
 
 // Create the context with a default value (can be undefined or a mock, but we'll handle it in the provider)
@@ -127,7 +124,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         removeFavorite,
       }}
     >
-      <div data-theme={theme}>{children}</div>
+      <div className="h-full bg-base-200" data-theme={theme}>
+        {children}
+      </div>
     </AppContext.Provider>
   )
 }
