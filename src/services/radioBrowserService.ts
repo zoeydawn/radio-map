@@ -21,7 +21,14 @@ export const stationsByGeographicArea = async (
 // stations by id
 export const stationsById = async (id: string) => {
   const response = await api.getStationsById([id])
-  // console.log({ response, geo_lat, geo_long })
+
+  return response || []
+}
+
+// stations by id
+export const stationsByVotes = async () => {
+  const response = await api.getStationsByVotes(150) // limit of 150
+  // console.log({ response })
 
   return response || []
 }
