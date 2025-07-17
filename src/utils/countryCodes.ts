@@ -1,4 +1,4 @@
-export const countryCodes = {
+export const countryCodes: { [index: string]: string } = {
   Andorra: 'AD',
   'The United Arab Emirates': 'AE',
   Afghanistan: 'AF',
