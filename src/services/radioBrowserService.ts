@@ -49,12 +49,19 @@ export const states = async (countryName: string) => {
   return response || []
 }
 
-// query stations by country code and limit to first 100 stations
-// const stations = await api.searchStations({
-//   countryCode: 'US',
-//   limit: 100,
-//   offset: 0 // this is the default - can be omited
-// })
+export const stationsByCountryCode = async (
+  countryCode: string,
+  offset: number = 0,
+) => {
+  const response = await api.searchStations({
+    countryCode,
+    limit: 100,
+    offset: offset * 100,
+  })
+  // console.log({ response })
+
+  return response || []
+}
 
 // // get next 100 stations
 // const stations = await api.searchStations({
