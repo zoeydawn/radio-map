@@ -74,18 +74,19 @@ const ShareButton: React.FC<ShareButtonProps> = ({ station, theme }) => {
         // Set success message if sharing is successful
         setMessage('Shared successfully!')
         setMessageType('success')
-      } catch (error: any) {
+      } catch (error) {
         // Handle user cancelling the share operation
-        if (error.name === 'AbortError') {
-          setMessage('Share cancelled.')
-          setMessageType('') // Not an error, not a success
-        } else {
-          // Log other errors and fall back to clipboard copy
-          console.error('Error sharing:', error)
-          setMessage('Failed to share. Copying to clipboard instead.')
-          setMessageType('error')
-          copyToClipboard() // Fallback
-        }
+        // if (error.name === 'AbortError') {
+        //   setMessage('Share cancelled.')
+        //   setMessageType('') // Not an error, not a success
+        // } else {
+        //   // Log other errors and fall back to clipboard copy
+        //   console.error('Error sharing:', error)
+        //   setMessage('Failed to share. Copying to clipboard instead.')
+        //   setMessageType('error')
+        console.error('error sharing:', error)
+        copyToClipboard() // Fallback
+        // }
       } finally {
         // Clear the message after 3 seconds
         setTimeout(() => {
