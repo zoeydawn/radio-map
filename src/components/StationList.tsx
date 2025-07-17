@@ -11,6 +11,7 @@ interface UserInfoProps {
   setViewedStation: (station: Station) => void
   header?: string
   isLoading?: boolean
+  onLoadMore?: () => void
 }
 
 const StationList: React.FC<UserInfoProps> = ({
@@ -18,6 +19,7 @@ const StationList: React.FC<UserInfoProps> = ({
   header,
   setViewedStation,
   isLoading,
+  onLoadMore,
 }) => {
   return (
     <div className="pb-50">
@@ -67,6 +69,13 @@ const StationList: React.FC<UserInfoProps> = ({
           )
         })}
         <li>{isLoading && <Loader />}</li>
+        {!isLoading && !!onLoadMore && (
+          <li className="flex flex-col items-center pt-2.5 pb-2.5">
+            <button onClick={onLoadMore} className="btn btn-soft btn-primary">
+              Load more
+            </button>
+          </li>
+        )}
       </ul>
     </div>
   )

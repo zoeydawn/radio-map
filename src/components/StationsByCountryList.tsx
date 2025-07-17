@@ -35,20 +35,15 @@ const StationsByCountryList: React.FC<StationsByCountryListProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center ">
+    <div className="flex flex-col items-center">
       <div className="w-full max-w-200 p-2">
         <StationList
           stations={allStations}
           setViewedStation={setViewedStation}
           header={`Radio stations in ${countryName}`}
           isLoading={loading}
+          onLoadMore={getStations}
         />
-
-        {!loading && (
-          <button onClick={getStations} className="btn btn-soft btn-primary">
-            Load more
-          </button>
-        )}
       </div>
     </div>
   )
