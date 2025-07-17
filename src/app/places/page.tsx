@@ -23,7 +23,7 @@ export default async function PlacesPage() {
   const countryArray = (await countries()) || []
 
   return (
-    <div className="flex flex-col items-center ">
+    <div className="flex flex-col items-center pb-50">
       <div className="w-full max-w-200 p-2">
         <h3 className="font-bold text-lg pl-2">Popular countries</h3>
         {[...countryArray]
