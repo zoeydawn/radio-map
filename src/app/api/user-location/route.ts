@@ -8,21 +8,27 @@ export async function GET(request: NextRequest) {
   let clientIp: string | undefined
 
   // I've been lead to beleave that 'request.ip' should work when deployed on Vercel.
-  if (request.ip) {
-    clientIp = request.ip
-  } else {
-    // Fallback to 'x-forwarded-for' if 'request.ip' is not available
-    const xForwardedFor = request.headers.get('x-forwarded-for')
-    if (xForwardedFor) {
-      // x-forwarded-for can be a comma-separated list of IPs
-      clientIp = xForwardedFor.split(',')[0].trim()
-    }
+  // if (request.ip) {
+  //   clientIp = request.ip
+  // } else {
+  //   // Fallback to 'x-forwarded-for' if 'request.ip' is not available
+  //   const xForwardedFor = request.headers.get('x-forwarded-for')
+  //   if (xForwardedFor) {
+  //     // x-forwarded-for can be a comma-separated list of IPs
+  //     clientIp = xForwardedFor.split(',')[0].trim()
+  //   }
+  // }
+
+  const xForwardedFor = request.headers.get('x-forwarded-for')
+  if (xForwardedFor) {
+    // x-forwarded-for can be a comma-separated list of IPs
+    clientIp = xForwardedFor.split(',')[0].trim()
   }
 
   // for development purposes only!
   // if (clientIp === '::ffff:127.0.0.1') {
-    // clientIp = '8.8.8.8'
-    // clientIp = undefined
+  // clientIp = '8.8.8.8'
+  // clientIp = undefined
   // }
 
   if (clientIp) {
@@ -31,7 +37,9 @@ export async function GET(request: NextRequest) {
     try {
       const response = await fetch(
         `https://geo.ipify.org/api/v2/country,city?apiKey=${IPIFY_TOKEN}&ipAddress=${clientIp}`,
+        { cache: 'no-store' },
       )
+
       const responseData = await response.json()
 
       return NextResponse.json({ ...responseData }, { status: 200 })
