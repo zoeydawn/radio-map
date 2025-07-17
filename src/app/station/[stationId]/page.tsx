@@ -13,25 +13,32 @@ interface StationPageProps {
 }
 
 // generateMetadata function to dynamically set page title and other metadata
-export async function generateMetadata(props: StationPageProps): Promise<Metadata> {
-  const params = await props.params;
-  const stationArray = (await stationsById(params.stationId)) || []
-  const station = stationArray[0]
+export async function generateMetadata(
+  props: StationPageProps,
+): Promise<Metadata> {
+  try {
+    const params = await props.params
+    const stationArray = (await stationsById(params.stationId)) || []
+    const station = stationArray[0]
 
-  if (!station) {
-    return {
-      title: 'Station Not Found', // Default title if item is not found
+    if (!station) {
+      return {
+        title: 'Station Not Found', // Default title if item is not found
+      }
     }
-  }
 
-  return {
-    title: station.name, // Set the page title to the item's name
-    description: simpleStationDiscription(station),
+    return {
+      title: station.name, // Set the page title to the item's name
+      description: simpleStationDiscription(station),
+    }
+  } catch (error) {
+    console.error('error fetching station:', error)
+    return { title: 'Error, Station Not Found' }
   }
 }
 
 export default async function StationPage(props: StationPageProps) {
-  const params = await props.params;
+  const params = await props.params
   const stationArray = (await stationsById(params.stationId)) || []
   const station = stationArray[0]
 
