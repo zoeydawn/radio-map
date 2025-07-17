@@ -11,13 +11,15 @@ interface ShareButtonProps {
   theme: Theme
 }
 
+const baseUrl = 'https://radio-map-eosin.vercel.app'
+
 const ShareButton: React.FC<ShareButtonProps> = ({ station, theme }) => {
   // State to manage the message displayed to the user (e.g., "Copied!", "Failed to copy.")
   const [message, setMessage] = useState<string>('')
   // State to manage the type of message (success or error) for styling
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
 
-  const stationPageToShare = `#/station/${station.id}`
+  const stationPageToShare = `${baseUrl}/station/${station.id}`
   /**
    * Copies the provided URL to the user's clipboard.
    * Uses a fallback method as `navigator.clipboard.writeText` might be restricted in some environments (like iframes).
