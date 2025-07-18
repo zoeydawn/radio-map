@@ -7,3 +7,8 @@ body {
   margin: 0;
   padding: 0; /* Also good to zero out padding */
 }
+
+.mapboxgl-ctrl-bottom-left,
+.mapboxgl-ctrl-bottom-right {
+  z-index: 0 !important;
+}
