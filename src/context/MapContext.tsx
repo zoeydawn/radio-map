@@ -130,8 +130,6 @@ export const MapViewProvider: React.FC<{ children: ReactNode }> = ({
         padding: {},
       })
     }
-
-    setIsLoading(false)
   }
 
   // Fetch data when the provider mounts
