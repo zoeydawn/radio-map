@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import Map from 'react-map-gl/mapbox'
+import Map, { ViewStateChangeEvent } from 'react-map-gl/mapbox'
 
 import { useAppContext } from '../context/AppContext'
 
@@ -17,9 +17,9 @@ export default function WorldMap() {
   const {
     isLoading,
     viewState,
-    setViewState,
-    getStationsByLatAndLong,
     radioStations,
+    setIsLoading,
+    getStationsByLatAndLong,
   } = useMapContext()
 
   const mapStyle =
@@ -33,20 +33,21 @@ export default function WorldMap() {
   if (isLoading && !radioStations.length) {
     return <Loader />
   }
-  // console.log('radiostations in WorldMap:', radioStations)
+
+  const handleMoveEnd = (evt: ViewStateChangeEvent) => {
+    // prevent multiple api requests at once
+    if (!isLoading) {
+      setIsLoading(true)
+
+      getStationsByLatAndLong(evt.viewState.latitude, evt.viewState.longitude)
+    }
+  }
 
   return (
     <div>
       <Map
-        viewState={{ ...viewState, width: 0, height: 0 }} // "width" and "hight" are added here to make TS happy. They don't actually have any effect
-        onMove={(evt) => setViewState(evt.viewState)}
-        onMoveEnd={(evt) => {
-          // console.log({ evt })
-          getStationsByLatAndLong(
-            evt.viewState.latitude,
-            evt.viewState.longitude,
-          )
-        }}
+        initialViewState={viewState}
+        onMoveEnd={handleMoveEnd}
         style={{ width: '100%', height: 800 }}
         mapStyle={mapStyle}
         mapboxAccessToken={MAPBOX_TOKEN}

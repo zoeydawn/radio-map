@@ -19,7 +19,7 @@ import { removeDuplicatesById } from '@/utils/radioStations'
 import { fetchEstimatedUserLocation } from '@/services/ipifyService'
 import { areLocationsWithin50Km } from '@/utils/map'
 
-const initialViewState: ViewState = {
+const defaultViewState: ViewState = {
   longitude: -73.7, // default to Montreal
   latitude: 45.5,
   zoom: 8.5,
@@ -38,7 +38,7 @@ export const MapViewProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true) // when initially fetching stations by geographic possition
   const [radioStations, setRadioStations] = useState<Station[]>([]) // stations by geographic possition
-  const [viewState, setViewState] = useState<ViewState>(initialViewState) // view state for the map
+  const [viewState, setViewState] = useState<ViewState>(defaultViewState) // view state for the map
   const [previousPossition, setPreviousPossition] = useState<Possition>({
     lat: 0,
     lon: 0,
