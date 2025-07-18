@@ -17,7 +17,6 @@ export default function WorldMap() {
   const {
     isLoading,
     viewState,
-    radioStations,
     setIsLoading,
     getStationsByLatAndLong,
   } = useMapContext()
@@ -26,13 +25,6 @@ export default function WorldMap() {
     theme === 'dark'
       ? 'mapbox://styles/mapbox/dark-v9'
       : 'mapbox://styles/mapbox/streets-v9'
-
-  // We only want to show the loading spinner initially when there are no stations in the state.
-  // We still want to display the map when fetching additional stations.
-  // Because when moving the map, we fetch additional stations but we don't delete the existing stations from state.
-  if (isLoading && !radioStations.length) {
-    return <Loader />
-  }
 
   const handleMoveEnd = (evt: ViewStateChangeEvent) => {
     // prevent multiple api requests at once
@@ -44,7 +36,7 @@ export default function WorldMap() {
   }
 
   return (
-    <div>
+    <div className="absolute bottom-0 top-0 left-0 right-0 pt-18">
       {isLoading && (
         <div className="absolute left-4 top-17 z-50">
           <Loader />
@@ -53,7 +45,7 @@ export default function WorldMap() {
       <Map
         initialViewState={viewState}
         onMoveEnd={handleMoveEnd}
-        style={{ width: '100%', height: 800 }}
+        style={{ width: '100%', height: '100%' }}
         mapStyle={mapStyle}
         mapboxAccessToken={MAPBOX_TOKEN}
       >
