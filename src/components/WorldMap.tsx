@@ -45,6 +45,11 @@ export default function WorldMap() {
 
   return (
     <div>
+      {isLoading && (
+        <div className="absolute left-4 top-17 z-50">
+          <Loader />
+        </div>
+      )}
       <Map
         initialViewState={viewState}
         onMoveEnd={handleMoveEnd}
