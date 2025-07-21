@@ -18,11 +18,11 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
   const [tagString, setTagString] = useState<string>('')
   const [selectedCountry, setSelectedCountry] = useState<string>('')
   const [selectedLanguage, setSelectedLanguage] = useState<string>('')
-  // const [nameString, setNameString] = useState<string>()
+  const [nameString, setNameString] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { setViewedStation } = useAppContext()
 
-//   console.log({ countries, languages })
+  //   console.log({ countries, languages })
 
   const getStations = async () => {
     // console.log('countryString:', selectedCountry)
@@ -31,7 +31,7 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
       tag: tagString,
       language: selectedLanguage,
       country: selectedCountry,
-      // name: nameString,
+      name: nameString,
       offset: 0,
     })
     // console.log('stations:', stations)
@@ -40,12 +40,27 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
     setIsLoading(false)
   }
 
-  const readyToSearch = !!(tagString || selectedCountry || selectedLanguage)
+  // check that at least one thing is selected
+  const readyToSearch = !!(
+    nameString ||
+    tagString ||
+    selectedCountry ||
+    selectedLanguage
+  )
 
   return (
     <>
       <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 m-auto">
         <legend className="fieldset-legend">Search for stations</legend>
+
+        <label className="label">Station name</label>
+        <input
+          type="text"
+          className="input"
+          placeholder="WXYC, Radio Canads, BBC, etc..."
+          value={nameString}
+          onChange={(event) => setNameString(event.target.value)}
+        />
 
         <label className="label">Tag</label>
         <input

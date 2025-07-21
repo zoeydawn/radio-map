@@ -71,24 +71,23 @@ export const stationsByCountryCode = async (
   return response || []
 }
 
-
 // export const searchStations = api.searchStations
 export const searchStations = async ({
   tag,
-  // name,
+  name,
   offset,
   country,
   language,
 }: {
   tag?: string
-  // name?: string
+  name?: string
   language?: string
   country?: string
   offset: number
 }) => {
   const response = await api.searchStations({
     tag,
-    // name,
+    name,
     country,
     language,
     limit: 100,
