@@ -96,15 +96,15 @@ const NavDrawer = () => {
               <LanguageIcon /> Languages
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               className="link link-hover"
-              href="/languages"
+              href="/tags"
               onClick={closeDrawer}
             >
               <RectangleGroupIcon /> Tags
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               className="link link-hover"
