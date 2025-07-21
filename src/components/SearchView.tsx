@@ -24,6 +24,13 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
   const [offset, setOffset] = useState<number>(0)
   const { setViewedStation } = useAppContext()
 
+  const clearAll = () => {
+    setTagString('')
+    setNameString('')
+    setSelectedCountry('')
+    setSelectedLanguage('')
+  }
+
   const getStations = async (currentOffset: number) => {
     const stations = await searchStations({
       tag: tagString,
@@ -88,22 +95,26 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
         />
 
         <label className="label">Country</label>
-        <select defaultValue="Search by country" className="select">
-          <option disabled={true}>Search by country</option>
+        <select
+          value={selectedCountry}
+          onChange={(e) => setSelectedCountry(e.target.value)}
+          className="select"
+        >
+          <option disabled={true}></option>
           {countries.map(({ name }, index) => (
-            <option onClick={() => setSelectedCountry(name)} key={index}>
-              {name}
-            </option>
+            <option key={index}>{name}</option>
           ))}
         </select>
 
         <label className="label">Language</label>
-        <select defaultValue="Search by Language" className="select">
-          <option disabled={true}>Search by Language</option>
+        <select
+          value={selectedLanguage}
+          onChange={(e) => setSelectedLanguage(e.target.value)}
+          className="select"
+        >
+          <option disabled={true}></option>
           {languages.map(({ name }, index) => (
-            <option onClick={() => setSelectedLanguage(name)} key={index}>
-              {name}
-            </option>
+            <option key={index}>{name}</option>
           ))}
         </select>
 
@@ -111,9 +122,13 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
           All fields are optional, but you must select at least one
         </span>
 
+        <button onClick={clearAll} className="btn btn-sm btn-ghost">
+          Clear all
+        </button>
+
         <button
           onClick={initiateSearch}
-          className="btn btn-info"
+          className="btn btn-info mt-2"
           disabled={!readyToSearch}
         >
           <SearchIcon />
