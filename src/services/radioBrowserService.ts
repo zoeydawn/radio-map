@@ -59,6 +59,18 @@ export const languages = async () => {
   return response || []
 }
 
+// tags
+export const tags = async () => {
+  const response = await api.getTags(undefined, {
+    hideBroken: true,
+    order: 'stationcount',
+    reverse: true,
+  })
+  // console.log({ response })
+
+  return response || []
+}
+
 export const stationsByCountryCode = async (
   countryCode: string,
   offset: number = 0,
@@ -75,15 +87,15 @@ export const stationsByCountryCode = async (
 
 // export const searchStations = api.searchStations
 export const searchStations = async (searchObject: AdvancedStationQuery) => {
-  // console.log('searchObject:', searchObject)
   const offset = searchObject.offset || 0
+  // console.log('searchObject:', searchObject)
+  const query = searchObject
+  query.limit = searchObject.limit || step
+  query.offset = offset * step
+  query.order = searchObject.order || 'votes'
+  query.reverse = searchObject.reverse === false ? false : true
 
-  const response = await api.searchStations({
-    ...searchObject,
-    limit: step,
-    offset: offset * step,
-    order: 'votes',
-  })
+  const response = await api.searchStations(searchObject)
   // console.log({ response })
 
   return response || []
