@@ -2,7 +2,15 @@
 
 import Link from 'next/link'
 import { useRef } from 'react'
-import { FlagIcon, HeartIcon, MapIcon, SearchIcon, StarIcon } from './Icons'
+import {
+  FlagIcon,
+  HeartIcon,
+  LanguageIcon,
+  MapIcon,
+  RectangleGroupIcon,
+  SearchIcon,
+  StarIcon,
+} from './Icons'
 import ThemeToggler from './ThemeToggler'
 
 const NavDrawer = () => {
@@ -77,6 +85,24 @@ const NavDrawer = () => {
               onClick={closeDrawer}
             >
               <FlagIcon /> Places
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="link link-hover"
+              href="/languages"
+              onClick={closeDrawer}
+            >
+              <LanguageIcon /> Languages
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="link link-hover"
+              href="/languages"
+              onClick={closeDrawer}
+            >
+              <RectangleGroupIcon /> Tags
             </Link>
           </li>
           <li>
