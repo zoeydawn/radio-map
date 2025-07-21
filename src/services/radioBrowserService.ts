@@ -1,6 +1,8 @@
-import { RadioBrowserApi } from 'radio-browser-api'
+import { AdvancedStationQuery, RadioBrowserApi } from 'radio-browser-api'
 
 const api = new RadioBrowserApi('Radio Map')
+
+export const step = 100
 
 export const stationsByGeographicArea = async (
   geo_lat: number,
@@ -72,26 +74,14 @@ export const stationsByCountryCode = async (
 }
 
 // export const searchStations = api.searchStations
-export const searchStations = async ({
-  tag,
-  name,
-  offset,
-  country,
-  language,
-}: {
-  tag?: string
-  name?: string
-  language?: string
-  country?: string
-  offset: number
-}) => {
+export const searchStations = async (searchObject: AdvancedStationQuery) => {
+  // console.log('searchObject:', searchObject)
+  const offset = searchObject.offset || 0
+
   const response = await api.searchStations({
-    tag,
-    name,
-    country,
-    language,
-    limit: 100,
-    offset: offset * 100,
+    ...searchObject,
+    limit: step,
+    offset: offset * step,
     order: 'votes',
   })
   // console.log({ response })

@@ -2,20 +2,20 @@
 
 import StationList from '@/components/StationList'
 import { useAppContext } from '@/context/AppContext'
-import { stationsByCountryCode } from '@/services/radioBrowserService'
-import { Station } from 'radio-browser-api'
+import { searchStations } from '@/services/radioBrowserService'
+import { AdvancedStationQuery, Station } from 'radio-browser-api'
 import { useState } from 'react'
 
-interface StationsByCountryListProps {
+interface ReloadableStationListProps {
   initialStations: Station[]
-  countryName: string
-  countryCode: string
+  header: string
+  searchParams: AdvancedStationQuery
 }
 
-const StationsByCountryList: React.FC<StationsByCountryListProps> = ({
+const ReloadableStationList: React.FC<ReloadableStationListProps> = ({
   initialStations,
-  countryName,
-  countryCode,
+  header,
+  searchParams,
 }) => {
   const [radioStations, setRadioStations] = useState<Station[]>([])
   const [offset, setOffset] = useState<number>(1)
@@ -26,8 +26,7 @@ const StationsByCountryList: React.FC<StationsByCountryListProps> = ({
 
   const getStations = async () => {
     setLoading(true)
-    const stations = await stationsByCountryCode(countryCode, offset)
-    // console.log('stations:', stations)
+    const stations = await searchStations({ ...searchParams, offset })
 
     setRadioStations([...radioStations, ...stations])
     setOffset(offset + 1)
@@ -40,7 +39,7 @@ const StationsByCountryList: React.FC<StationsByCountryListProps> = ({
         <StationList
           stations={allStations}
           setViewedStation={setViewedStation}
-          header={`Radio stations in ${countryName}`}
+          header={header}
           isLoading={loading}
           onLoadMore={getStations}
         />
@@ -49,4 +48,4 @@ const StationsByCountryList: React.FC<StationsByCountryListProps> = ({
   )
 }
 
-export default StationsByCountryList
+export default ReloadableStationList
