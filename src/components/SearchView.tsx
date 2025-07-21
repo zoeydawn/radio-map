@@ -19,25 +19,41 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
   const [selectedCountry, setSelectedCountry] = useState<string>('')
   const [selectedLanguage, setSelectedLanguage] = useState<string>('')
   const [nameString, setNameString] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false) // for initial searches
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false) // for loading additional stations
+  const [offset, setOffset] = useState<number>(0)
   const { setViewedStation } = useAppContext()
 
-  //   console.log({ countries, languages })
-
-  const getStations = async () => {
-    // console.log('countryString:', selectedCountry)
-    setIsLoading(true)
+  const getStations = async (currentOffset: number) => {
     const stations = await searchStations({
       tag: tagString,
       language: selectedLanguage,
       country: selectedCountry,
       name: nameString,
-      offset: 0,
+      offset: currentOffset,
     })
-    // console.log('stations:', stations)
 
-    setRadioStations(stations)
+    return stations
+  }
+
+  // only to be run when the button is clicked
+  const initiateSearch = async () => {
+    setIsLoading(true)
+    const stations = await getStations(0)
+
     setIsLoading(false)
+    setOffset(1)
+    setRadioStations(stations)
+  }
+
+  // to be run when "load more" is clicked
+  const fetchMore = async () => {
+    setIsLoadingMore(true)
+    const stations = await getStations(offset)
+
+    setRadioStations([...radioStations, ...stations])
+    setOffset(offset + 1)
+    setIsLoadingMore(false)
   }
 
   // check that at least one thing is selected
@@ -71,15 +87,6 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
           onChange={(event) => setTagString(event.target.value)}
         />
 
-        {/* <label className="label">Station name</label>
-        <input
-          type="text"
-          className="input"
-          placeholder="WXYC, Radio Canads, BBC, etc..."
-          value={tagString}
-          onChange={(event) => setNameString(event.target.value)}
-        /> */}
-
         <label className="label">Country</label>
         <select defaultValue="Search by country" className="select">
           <option disabled={true}>Search by country</option>
@@ -105,7 +112,7 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
         </span>
 
         <button
-          onClick={getStations}
+          onClick={initiateSearch}
           className="btn btn-info"
           disabled={!readyToSearch}
         >
@@ -119,6 +126,8 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
         <StationList
           stations={radioStations}
           setViewedStation={setViewedStation}
+          isLoading={isLoadingMore}
+          onLoadMore={fetchMore}
           // header=""
         />
       )}
