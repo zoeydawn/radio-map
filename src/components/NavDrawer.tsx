@@ -80,7 +80,11 @@ const NavDrawer = () => {
             </Link>
           </li>
           <li>
-            <Link className="link link-hover" href="/" onClick={closeDrawer}>
+            <Link
+              className="link link-hover"
+              href="/search"
+              onClick={closeDrawer}
+            >
               <SearchIcon /> Search
             </Link>
           </li>

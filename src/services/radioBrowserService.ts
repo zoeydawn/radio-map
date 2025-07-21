@@ -49,6 +49,14 @@ export const states = async (countryName: string) => {
   return response || []
 }
 
+// languages
+export const languages = async () => {
+  const response = await api.getLanguages()
+  // console.log({ response })
+
+  return response || []
+}
+
 export const stationsByCountryCode = async (
   countryCode: string,
   offset: number = 0,
@@ -63,12 +71,34 @@ export const stationsByCountryCode = async (
   return response || []
 }
 
-// // get next 100 stations
-// const stations = await api.searchStations({
-//   countryCode: 'US',
-//   limit: 100,
-//   offset: 1 // 1 - is the second page
-// })
+
+// export const searchStations = api.searchStations
+export const searchStations = async ({
+  tag,
+  // name,
+  offset,
+  country,
+  language,
+}: {
+  tag?: string
+  // name?: string
+  language?: string
+  country?: string
+  offset: number
+}) => {
+  const response = await api.searchStations({
+    tag,
+    // name,
+    country,
+    language,
+    limit: 100,
+    offset: offset * 100,
+    order: 'votes',
+  })
+  // console.log({ response })
+
+  return response || []
+}
 
 // // query stations by languge and tag
 // const stations = await api.searchStations({

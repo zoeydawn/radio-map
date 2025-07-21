@@ -1,6 +1,5 @@
 'use client'
 
-import Loader from '@/components/Loader'
 import StationList from '@/components/StationList'
 import { useAppContext } from '@/context/AppContext'
 import { stationsByVotes } from '@/services/radioBrowserService'
@@ -29,7 +28,6 @@ export default function Popular() {
         setViewedStation={setViewedStation}
         header="Popular stations"
       />
-      <Loader />
     </>
   )
 }
