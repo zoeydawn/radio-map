@@ -4,7 +4,7 @@ import { SearchIcon } from '@/components/Icons'
 import Loader from '@/components/Loader'
 import StationList from '@/components/StationList'
 import { useAppContext } from '@/context/AppContext'
-import { searchStations } from '@/services/radioBrowserService'
+import { searchStations, step } from '@/services/radioBrowserService'
 import { CountryResult, Station } from 'radio-browser-api'
 import { useState } from 'react'
 
@@ -22,6 +22,8 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false) // for initial searches
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false) // for loading additional stations
   const [offset, setOffset] = useState<number>(0)
+  const [areMoreStationsToLoad, setAreMoreStationsToLoad] =
+    useState<boolean>(true)
   const { setViewedStation } = useAppContext()
 
   const clearAll = () => {
@@ -51,6 +53,7 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
     setIsLoading(false)
     setOffset(1)
     setRadioStations(stations)
+    setAreMoreStationsToLoad(stations.length === step)
   }
 
   // to be run when "load more" is clicked
@@ -61,6 +64,7 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
     setRadioStations([...radioStations, ...stations])
     setOffset(offset + 1)
     setIsLoadingMore(false)
+    setAreMoreStationsToLoad(stations.length === step)
   }
 
   // check that at least one thing is selected
@@ -144,6 +148,7 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
           isLoading={isLoadingMore}
           onLoadMore={fetchMore}
           // header=""
+          hideLoadButton={!areMoreStationsToLoad}
         />
       )}
     </>
