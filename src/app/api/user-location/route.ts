@@ -36,8 +36,7 @@ export async function GET(request: NextRequest) {
 
     try {
       const response = await fetch(
-        `https://geo.ipify.org/api/v2/country,city?apiKey=${IPIFY_TOKEN}&ipAddress=${clientIp}`,
-        { cache: 'no-store' },
+        `https://geo.ipify.org/api/v2/country,city?apiKey=${IPIFY_TOKEN}&ipAddress=${clientIp}`
       )
 
       const responseData = await response.json()
