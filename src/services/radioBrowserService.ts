@@ -94,6 +94,7 @@ export const searchStations = async (searchObject: AdvancedStationQuery) => {
   query.offset = offset * step
   query.order = searchObject.order || 'votes'
   query.reverse = searchObject.reverse === false ? false : true
+  query.hideBroken = true
 
   const response = await api.searchStations(searchObject)
   // console.log({ response })
