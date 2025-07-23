@@ -5,11 +5,14 @@ export function combineStrings(strings: string[]): string {
 }
 
 export function simpleStationDiscription({ tags, language }: Station) {
-  return `${combineStrings(tags)} - ${combineStrings(language)}`
+  const tagString = combineStrings(tags)
+  const languageString = combineStrings(language)
+
+  return `${tagString}${tagString && languageString ? ' - ' : ''}${languageString}`
 }
 
-export function locationString(station: Station) {
-  return `${station.state}, ${station.country}`
+export function locationString({ state, country }: Station) {
+  return `${state}${state && country ? ', ' : ''}${country}`
 }
 
 export function getImageUrlForStation({ favicon }: Station) {
