@@ -32,13 +32,13 @@ const StationInfo: React.FC<UserInfoProps> = ({
       <div className="capitalize">
         Language:{' '}
         {station.language.map((language) => (
-          <div key={language} className="badge badge-secondary badge-sm ml-1">
+          <div key={language} className="badge badge-secondary ml-1">
             {language}
           </div>
         ))}
       </div>
 
-      <div className="pt-3 capitalize">
+      <div className="pt-3 uppercase">
         Tags:{' '}
         {station.tags.map((tag) => (
           <div key={tag} className="badge badge-info badge-sm ml-1">
@@ -47,7 +47,7 @@ const StationInfo: React.FC<UserInfoProps> = ({
         ))}
       </div>
 
-      <div className='flex justify-between items-center mt-4'>
+      <div className="flex justify-between items-center mt-4">
         <ExternalLink
           href={station.homepage}
           rel={station.name}
