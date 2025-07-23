@@ -1,10 +1,12 @@
-// This is a Server Component, meaning it runs on the server.
-// Data fetching can be done directly here.
-
 import StationInfo from '@/components/StationInfo'
 import { stationsById } from '@/services/radioBrowserService'
 import { simpleStationDiscription } from '@/utils/radioStations'
 import { Metadata } from 'next'
+import { headers } from 'next/headers'
+
+// Define the base URL for production
+// TODO: update this once domain is set up
+const productionUrl = 'https://radio-map-eosin.vercel.app'
 
 interface StationPageProps {
   params: Promise<{
@@ -27,9 +29,43 @@ export async function generateMetadata(
       }
     }
 
+    // Dynamically get the base URL from the request headers
+    const rawHeaders = await headers()
+    const host = rawHeaders.get('host')
+
+    const protocol =
+      host && (host.startsWith('localhost') || host.startsWith('127.0.0.1'))
+        ? 'http'
+        : 'https'
+    const baseUrl = host ? `${protocol}://${host}` : productionUrl
+
+    const stationUrl = `${baseUrl}/station/${station.id}`
+    const imageUrl = station.favicon || `${baseUrl}/default-image.jpg`
+
     return {
       title: station.name, // Set the page title to the item's name
       description: simpleStationDiscription(station),
+      openGraph: {
+        // Open Graph metadata for social media sharing
+        title: station.name,
+        description: simpleStationDiscription(station),
+        url: stationUrl,
+        images: [
+          {
+            url: imageUrl,
+            width: 150,
+            height: 150,
+            alt: station.name,
+          },
+        ],
+      },
+      twitter: {
+        // Twitter Card metadata
+        card: 'summary_large_image',
+        title: station.name,
+        description: simpleStationDiscription(station),
+        images: [imageUrl],
+      },
     }
   } catch (error) {
     console.error('error fetching station:', error)
