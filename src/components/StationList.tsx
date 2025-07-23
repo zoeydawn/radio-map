@@ -1,13 +1,10 @@
-import {
-  getImageUrlForStation,
-  simpleStationDiscription,
-} from '@/utils/radioStations'
-import Image from 'next/image'
+import { simpleStationDiscription } from '@/utils/radioStations'
 import { Station } from 'radio-browser-api'
 import * as React from 'react'
 import PlayButton from './PlayButton'
 import LikeButton from './LikeButton'
 import Loader from './Loader'
+import StationImage from './StationImage'
 
 interface UserInfoProps {
   stations: Station[]
@@ -37,7 +34,6 @@ const StationList: React.FC<UserInfoProps> = ({
 
         {stations.map((station) => {
           const { id, name } = station
-          const imageUrl = getImageUrlForStation(station)
 
           return (
             <li className="list-row" key={`station-${id}`}>
@@ -45,15 +41,7 @@ const StationList: React.FC<UserInfoProps> = ({
                 className="cursor-pointer"
                 onClick={() => setViewedStation(station)}
               >
-                <Image
-                  className="size-10 rounded-box"
-                  alt={name}
-                  src={imageUrl}
-                  height={40}
-                  width={40}
-                  placeholder="blur"
-                  blurDataURL={'/favicon.ico'}
-                />
+                <StationImage station={station} />
               </div>
               <div
                 className="cursor-pointer"

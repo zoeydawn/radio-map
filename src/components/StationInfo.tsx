@@ -5,6 +5,7 @@ import LikeButton from './LikeButton'
 import ExternalLink from './ExternalLink'
 import { Theme } from '@/context/AppContext.types'
 import ShareButton from './ShareButton'
+import StationImage from './StationImage'
 
 interface UserInfoProps {
   station: Station
@@ -17,40 +18,52 @@ const StationInfo: React.FC<UserInfoProps> = ({
   theme,
   handleClose,
 }) => {
+  const { language, tags, homepage, name } = station
+
+  // because there is an empty string in the language array when there is no language
+  const languageArrayIsEmpty = !(language.length && language[0] !== '')
+
   return (
     <>
       <div className="flex justify-between">
-        <h3 className="font-bold text-xl">{station.name}</h3>
+        <StationImage station={station} />
         {!!handleClose && (
           <div onClick={handleClose} className="text-sm link">
             close
           </div>
         )}
       </div>
+      <h3 className="font-bold text-lg pt-2">{name}</h3>
       <div className="divider"></div>
 
-      <div className="capitalize">
-        Language:{' '}
-        {station.language.map((language) => (
-          <div key={language} className="badge badge-secondary ml-1">
-            {language}
-          </div>
-        ))}
-      </div>
+      {!languageArrayIsEmpty && (
+        <div className="capitalize">
+          Language:{' '}
+          {language.map((language) =>
+            language ? (
+              <div key={language} className="badge badge-secondary ml-1">
+                {language}
+              </div>
+            ) : null,
+          )}
+        </div>
+      )}
 
-      <div className="pt-3 uppercase">
-        Tags:{' '}
-        {station.tags.map((tag) => (
-          <div key={tag} className="badge badge-info badge-sm ml-1">
-            {tag}
-          </div>
-        ))}
-      </div>
+      {!!tags.length && (
+        <div className="pt-3 ">
+          Tags:{' '}
+          {tags.map((tag) => (
+            <div key={tag} className="badge badge-info badge-sm ml-1 uppercase">
+              {tag}
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="flex justify-between items-center mt-4">
         <ExternalLink
-          href={station.homepage}
-          rel={station.name}
+          href={homepage}
+          rel={name}
           label="Homepage"
           theme={theme}
         />
