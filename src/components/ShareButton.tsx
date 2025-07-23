@@ -124,14 +124,16 @@ const ShareButton: React.FC<ShareButtonProps> = ({ station, theme }) => {
 
       {/* Message display area */}
       {message && (
-        <div
-          className={`mt-4 p-3 rounded-lg text-sm font-medium ${
-            messageType === 'success'
-              ? 'bg-green-100 text-green-800'
-              : 'bg-red-100 text-red-800'
-          } shadow-md`}
-        >
-          {message}
+        <div className="fixed bottom-28 left-0 right-0 flex items-center flex-col">
+          <div
+            className={`mt-4 p-3 rounded-lg text-sm font-medium ${
+              messageType === 'success'
+                ? 'bg-green-100 text-green-800'
+                : 'bg-red-100 text-red-800'
+            } shadow-md`}
+          >
+            {message}
+          </div>
         </div>
       )}
     </>
