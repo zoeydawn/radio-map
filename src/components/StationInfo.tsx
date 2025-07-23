@@ -1,4 +1,3 @@
-import { locationString, simpleStationDiscription } from '@/utils/radioStations'
 import { Station } from 'radio-browser-api'
 import * as React from 'react'
 import PlayButton from './PlayButton'
@@ -21,28 +20,43 @@ const StationInfo: React.FC<UserInfoProps> = ({
   return (
     <>
       <div className="flex justify-between">
-        <h3 className="font-bold text-lg">{station.name}</h3>
+        <h3 className="font-bold text-xl">{station.name}</h3>
         {!!handleClose && (
           <div onClick={handleClose} className="text-sm link">
             close
           </div>
         )}
       </div>
-      <p className="pt-2 capitalize">{simpleStationDiscription(station)}</p>
-      <p className="pt-2 pb-2 capitalize">{locationString(station)}</p>
-      <ExternalLink
-        href={station.homepage}
-        rel={station.name}
-        label="Station Homepage"
-        theme={theme}
-      />
-      <ExternalLink
-        href={station.urlResolved}
-        rel={station.urlResolved}
-        label="Station Stream Link"
-        theme={theme}
-      />
-      <ShareButton station={station} theme={theme} />
+      <div className="divider"></div>
+
+      <div className="capitalize">
+        Language:{' '}
+        {station.language.map((language) => (
+          <div key={language} className="badge badge-secondary badge-sm ml-1">
+            {language}
+          </div>
+        ))}
+      </div>
+
+      <div className="pt-3 capitalize">
+        Tags:{' '}
+        {station.tags.map((tag) => (
+          <div key={tag} className="badge badge-info badge-sm ml-1">
+            {tag}
+          </div>
+        ))}
+      </div>
+
+      <div className='flex justify-between items-center mt-4'>
+        <ExternalLink
+          href={station.homepage}
+          rel={station.name}
+          label="Homepage"
+          theme={theme}
+        />
+
+        <ShareButton station={station} theme={theme} />
+      </div>
 
       <div className="divider"></div>
 
