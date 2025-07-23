@@ -12,6 +12,12 @@ export function locationString(station: Station) {
   return `${station.state}, ${station.country}`
 }
 
+export function getImageUrlForStation({ favicon }: Station) {
+  return favicon
+    ? `/api/image-proxy?url=${encodeURIComponent(favicon)}`
+    : '/favicon.ico'
+}
+
 // as we add more stations to the state, make sure there are no duplicates
 export function removeDuplicatesById(array: Station[]): Station[] {
   const seenIds = new Set<string>() // Use Set for efficient lookups

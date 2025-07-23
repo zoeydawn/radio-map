@@ -1,4 +1,7 @@
-import { simpleStationDiscription } from '@/utils/radioStations'
+import {
+  getImageUrlForStation,
+  simpleStationDiscription,
+} from '@/utils/radioStations'
 import Image from 'next/image'
 import { Station } from 'radio-browser-api'
 import * as React from 'react'
@@ -33,10 +36,8 @@ const StationList: React.FC<UserInfoProps> = ({
         )}
 
         {stations.map((station) => {
-          const { id, name, favicon } = station
-          const proxiedSrc = favicon
-            ? `/api/image-proxy?url=${encodeURIComponent(favicon)}`
-            : '/favicon.ico'
+          const { id, name } = station
+          const imageUrl = getImageUrlForStation(station)
 
           return (
             <li className="list-row" key={`station-${id}`}>
@@ -47,7 +48,7 @@ const StationList: React.FC<UserInfoProps> = ({
                 <Image
                   className="size-10 rounded-box"
                   alt={name}
-                  src={proxiedSrc}
+                  src={imageUrl}
                   height={40}
                   width={40}
                   placeholder="blur"
