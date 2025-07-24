@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import NavDrawer from './NavDrawer'
-import { HeartIcon } from './Icons'
+import { HeartIcon, MapPinIcon } from './Icons'
 
 export default function Navbar() {
   return (
@@ -12,7 +12,10 @@ export default function Navbar() {
         </div>
 
         <div className="navbar-center">
-          <a className="btn btn-ghost text-xl">RadioMap</a>
+          <Link href="/" className="btn btn-ghost text-xl">
+            <MapPinIcon />
+            Radio-Map
+          </Link>
         </div>
         <div className="navbar-end pr-2.5">
           <Link className="link link-hover" href="/favorites">
