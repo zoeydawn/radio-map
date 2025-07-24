@@ -84,7 +84,7 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
         <input
           type="text"
           className="input"
-          placeholder="WXYC, Radio Canads, BBC, etc..."
+          placeholder="WXYC, Radio Canada, BBC, etc..."
           value={nameString}
           onChange={(event) => setNameString(event.target.value)}
         />
