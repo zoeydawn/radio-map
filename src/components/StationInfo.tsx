@@ -19,7 +19,7 @@ const StationInfo: React.FC<UserInfoProps> = ({
   theme,
   handleClose,
 }) => {
-  const { language, tags, homepage, name } = station
+  const { language, tags, homepage, name, country } = station
 
   // because there is an empty string in the language array when there is no language
   const languageArrayIsEmpty = !(language.length && language[0] !== '')
@@ -48,6 +48,11 @@ const StationInfo: React.FC<UserInfoProps> = ({
       </div>
       <h3 className="font-bold text-lg pt-2">{name}</h3>
       <div className="divider"></div>
+      {!!country && (
+        <div className="capitalize pb-3">
+          Location: <div className="badge badge-primary ml-1">{country}</div>
+        </div>
+      )}
 
       {!languageArrayIsEmpty && (
         <div className="capitalize">
