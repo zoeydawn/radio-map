@@ -75,29 +75,36 @@ export async function generateMetadata(
 
 export default async function StationPage(props: StationPageProps) {
   const params = await props.params
-  const stationArray = (await stationsById(params.stationId)) || []
-  const station = stationArray[0]
 
-  if (!station) {
+  try {
+    const stationArray = (await stationsById(params.stationId)) || []
+    const station = stationArray[0]
+
+    if (!station) {
+      return (
+        <div className="flex items-center justify-center min-h-screen p-4">
+          <div className="p-8 rounded-lg shadow-xl max-w-2xl w-full">
+            <h1 className="text-4xl font-extrabold mb-4 rounded-md p-2 ">
+              Not found
+            </h1>
+            <p className=" text-base border-l-4  pl-4 py-2 rounded-md">
+              We could not find that station
+            </p>
+          </div>
+        </div>
+      )
+    }
+
     return (
-      <div className="flex items-center justify-center min-h-screen p-4">
+      <div className="flex items-center justify-center p-4">
         <div className="p-8 rounded-lg shadow-xl max-w-2xl w-full">
-          <h1 className="text-4xl font-extrabold mb-4 rounded-md p-2 ">
-            Not found
-          </h1>
-          <p className=" text-base border-l-4  pl-4 py-2 rounded-md">
-            We could not find that station
-          </p>
+          <StationInfo station={station} theme={'dark'} />
         </div>
       </div>
     )
-  }
+  } catch (error) {
+    console.error('error fetching station:', error)
 
-  return (
-    <div className="flex items-center justify-center p-4">
-      <div className="p-8 rounded-lg shadow-xl max-w-2xl w-full">
-        <StationInfo station={station} theme={'dark'} />
-      </div>
-    </div>
-  )
+    return <h4>Error getting station info. Please try again later.</h4>
+  }
 }
