@@ -5,7 +5,8 @@ import LikeButton from './LikeButton'
 import ExternalLink from './ExternalLink'
 import { Theme } from '@/context/AppContext.types'
 import ShareButton from './ShareButton'
-import StationImage from './StationImage'
+import Image from 'next/image'
+import { getImageUrlForStation } from '@/utils/radioStations'
 
 interface UserInfoProps {
   station: Station
@@ -22,11 +23,23 @@ const StationInfo: React.FC<UserInfoProps> = ({
 
   // because there is an empty string in the language array when there is no language
   const languageArrayIsEmpty = !(language.length && language[0] !== '')
+  const imageUrl = getImageUrlForStation(station)
 
   return (
     <>
       <div className="flex justify-between">
-        <StationImage station={station} />
+        <div className="relative h-28 w-4/5">
+          <Image
+            className="size-10 rounded-box"
+            alt={station.name}
+            src={imageUrl}
+            fill // Makes the image fill the parent div
+            style={{ objectFit: 'contain', objectPosition: 'left' }}
+            sizes="(max-width: 400px) 100vw, 400px"
+            placeholder="blur"
+            blurDataURL={'/favicon.ico'}
+          />
+        </div>
         {!!handleClose && (
           <div onClick={handleClose} className="text-sm link">
             close
