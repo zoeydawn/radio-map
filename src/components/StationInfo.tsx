@@ -7,6 +7,11 @@ import { Theme } from '@/context/AppContext.types'
 import ShareButton from './ShareButton'
 import Image from 'next/image'
 import { getImageUrlForStation } from '@/utils/radioStations'
+import {
+  FlagIconMini,
+  LanguageIcon,
+  TagIconMini,
+} from './Icons'
 
 interface UserInfoProps {
   station: Station
@@ -49,13 +54,15 @@ const StationInfo: React.FC<UserInfoProps> = ({
       <h3 className="font-bold text-lg pt-2">{name}</h3>
       <div className="divider"></div>
       {!!country && (
-        <div className="capitalize pb-3">
+        <div className="capitalize pb-3 flex">
+          <FlagIconMini />{' '}
           Location: <div className="badge badge-primary ml-1">{country}</div>
         </div>
       )}
 
       {!languageArrayIsEmpty && (
-        <div className="capitalize">
+        <div className="capitalize flex">
+          <LanguageIcon />{' '}
           Language:{' '}
           {language.map((language) =>
             language ? (
@@ -68,7 +75,8 @@ const StationInfo: React.FC<UserInfoProps> = ({
       )}
 
       {!!tags.length && (
-        <div className="pt-3 ">
+        <div className="pt-3 flex">
+          <TagIconMini />{' '}
           Tags:{' '}
           {tags.map((tag) => (
             <div key={tag} className="badge badge-info badge-sm ml-1 uppercase">

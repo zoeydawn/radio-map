@@ -7,7 +7,7 @@ import {
   HeartIcon,
   LanguageIcon,
   MapIcon,
-  RectangleGroupIcon,
+  // RectangleGroupIcon,
   SearchIcon,
   StarIcon,
 } from './Icons'
