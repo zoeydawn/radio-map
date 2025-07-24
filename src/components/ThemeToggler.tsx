@@ -12,7 +12,10 @@ const ThemeToggler: React.FC = () => {
   }
 
   return (
-    <button onClick={toggleTheme} className="btn btn-ghost btn-circle">
+    <button
+      onClick={toggleTheme}
+      className="btn btn-ghost btn-circle mt-4 ml-2"
+    >
       {theme === 'dark' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"

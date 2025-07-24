@@ -123,11 +123,10 @@ const NavDrawer = () => {
               <HeartIcon /> Favorites
             </Link>
           </li>
+          <li>
+            <ThemeToggler />
+          </li>
         </ul>
-
-        <div className="absolute bottom-2 p-6">
-          <ThemeToggler />
-        </div>
       </div>
     </div>
   )
