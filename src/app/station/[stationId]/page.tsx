@@ -94,7 +94,7 @@ export default async function StationPage(props: StationPageProps) {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
+    <div className="flex items-center justify-center p-4">
       <div className="p-8 rounded-lg shadow-xl max-w-2xl w-full">
         <StationInfo station={station} theme={'dark'} />
       </div>
