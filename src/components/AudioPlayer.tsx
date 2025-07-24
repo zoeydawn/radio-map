@@ -134,7 +134,7 @@ const AudioPlayer: React.FC = () => {
 
   return (
     <div className="fixed bottom-0 left-0 w-full flex flex-col items-center shadow-sm">
-      <div className="rounded-lg bg-base-300 w-full max-w-150">
+      <div className="rounded-lg bg-base-300 w-full max-w-170">
         <div className="flex flex-col items-center space-y-4 p-3">
           <audio ref={audioRef} preload="metadata" className="hidden" />
           <h3
