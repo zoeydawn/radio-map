@@ -36,6 +36,9 @@ export const unclusteredPointLayer: LayerProps = {
   type: 'circle',
   source: 'radio stations',
   filter: ['!', ['has', 'point_count']],
+  // layout: {
+  //   'icon-image': 
+  // },
   paint: {
     'circle-color': '#11b4da',
     'circle-radius': 4,

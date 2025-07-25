@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import * as GeoJSON from 'geojson'
 import Map, {
   Layer,
   MapRef,
@@ -20,22 +21,34 @@ import {
   unclusteredPointLayer,
 } from './layers'
 import { MapMouseEvent } from 'mapbox-gl'
+import { radioStationList } from '@/context/radioStationList'
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
+const radioStations = radioStationList
+
 export default function WorldMap() {
   const { theme } = useAppContext()
-  const { isLoading, viewState, setIsLoading, getStationsByLatAndLong } =
-    useMapContext()
+  const {
+    isLoading,
+    viewState,
+    setIsLoading,
+    // radioStations,
+    getStationsByLatAndLong,
+  } = useMapContext()
 
   const mapRef = React.useRef<MapRef>(null)
 
   const onClick = (event: MapMouseEvent) => {
+    // if ()
     const feature = event.features[0]
+
+    console.log('feature', feature)
+    console.log('event...', event)
     const clusterId = feature.properties.cluster_id
 
     const mapboxSource = mapRef.current.getSource(
-      'earthquakes',
+      'radio stations',
     ) as GeoJSONSource
 
     mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
@@ -65,6 +78,17 @@ export default function WorldMap() {
     }
   }
 
+  // const geoStations: FeatureCollection = radioStations.map((station) => {
+  //   station.geoLat, station.geoLong
+  // })
+
+  const geojsonStations = GeoJSON.parse(radioStations, {
+    Point: ['geoLat', 'geoLong'],
+  })
+
+  console.log('geojsonStations:', geojsonStations)
+  console.log('radioStations:', radioStations)
+
   return (
     <div className="absolute bottom-0 top-0 left-0 right-0 pt-18">
       {isLoading && (
@@ -82,18 +106,19 @@ export default function WorldMap() {
         onClick={onClick}
         ref={mapRef}
       >
-        {/* <Pins /> */}
         <Source
-          id="earthquakes"
+          id="radio stations"
           type="geojson"
-          data="https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"
+          data={geojsonStations}
           cluster={true}
           clusterMaxZoom={14}
           clusterRadius={50}
         >
           <Layer {...clusterLayer} />
           <Layer {...clusterCountLayer} />
+          {/* <Layer {...unclusteredPointLayer} /> */}
           <Layer {...unclusteredPointLayer} />
+          {/* <Pins /> */}
         </Source>
       </Map>
     </div>
