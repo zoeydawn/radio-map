@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    dangerouslyAllowSVG: true, // so that we can proxy .svg images
     // so that our immage proxy works
     // For development env:
     remotePatterns: [
@@ -23,13 +24,13 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/api/image-proxy/**',
       },
-      // You might also add your actual production domain here:
-      // {
-      //   protocol: 'https',
-      //   hostname: 'www.your-production-domain.com',
-      //   port: '',
-      //   pathname: '/api/image-proxy/**',
-      // },
+      // production domain:
+      {
+        protocol: 'https',
+        hostname: 'radio-map.com',
+        port: '',
+        pathname: '/api/image-proxy/**',
+      },
     ],
   },
 }
