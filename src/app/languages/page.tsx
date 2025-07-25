@@ -20,16 +20,23 @@ const getButtonSize = ({ stationcount }: CountryResult) => {
 }
 
 export default async function PlacesPage() {
-  const languagesArray = (await languages()) || []
-  const listItems = languagesArray.map((language) => {
-    return {
-      id: language.name,
-      name: language.name,
-      buttonSizeClassName: getButtonSize(language),
-    }
-  })
+  try {
+    const languagesArray = (await languages()) || []
+    const listItems = languagesArray.map((language) => {
+      return {
+        id: language.name,
+        name: language.name,
+        buttonSizeClassName: getButtonSize(language),
+      }
+    })
+  
+    return (
+      <ButtonList items={listItems} baseHref="/languages" title="All Languages" />
+    )
 
-  return (
-    <ButtonList items={listItems} baseHref="/languages" title="All Languages" />
-  )
+  } catch (error) {
+    console.error('error in language page:', error)
+
+    return <h3>We are having trouble fetching languages. Please try again later</h3>
+  }
 }

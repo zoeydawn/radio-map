@@ -20,17 +20,17 @@ const getButtonSize = ({ stationcount }: CountryResult) => {
 }
 
 export default async function TagsPage() {
-  const tagsArray = (await tags()) || []
-  // console.log('tags array:', tagsArray)
-  const listItems = tagsArray
-    .sort((a, b) => b.stationcount - a.stationcount)
-    .map((tag) => {
-      return {
-        id: tag.name,
-        name: `${tag.name}`,
-        buttonSizeClassName: getButtonSize(tag),
-      }
-    })
+  // const tagsArray = (await tags()) || []
+  // // console.log('tags array:', tagsArray)
+  // const listItems = tagsArray
+  //   .sort((a, b) => b.stationcount - a.stationcount)
+  //   .map((tag) => {
+  //     return {
+  //       id: tag.name,
+  //       name: `${tag.name}`,
+  //       buttonSizeClassName: getButtonSize(tag),
+  //     }
+  //   })
 
-  return <ButtonList items={listItems} baseHref="/tags" title="All tags" />
+  return <ButtonList items={[]} baseHref="/tags" title="All tags" />
 }
