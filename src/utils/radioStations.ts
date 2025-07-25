@@ -35,3 +35,18 @@ export function removeDuplicatesById(array: Station[]): Station[] {
 
   return uniqueArray
 }
+
+// because some country names are too long
+export function simplifiedCountryName(country: string) {
+  const simplifiedNames: { [index: string]: string } = {
+    'The United Kingdom Of Great Britain And Northern Ireland':
+      'United Kingdom',
+    'The Democratic Peoples Republic Of Korea': 'North Korea',
+    'The United States Of America': 'United States',
+    'The United Arab Emirates': 'UAE',
+    'The Russian Federation': 'Russia',
+    'The United States Minor Outlying Islands': 'US Minor Outlying Islands',
+  }
+
+  return simplifiedNames[country] || country
+}

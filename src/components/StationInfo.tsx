@@ -6,12 +6,11 @@ import ExternalLink from './ExternalLink'
 import { Theme } from '@/context/AppContext.types'
 import ShareButton from './ShareButton'
 import Image from 'next/image'
-import { getImageUrlForStation } from '@/utils/radioStations'
 import {
-  FlagIconMini,
-  LanguageIcon,
-  TagIconMini,
-} from './Icons'
+  getImageUrlForStation,
+  simplifiedCountryName,
+} from '@/utils/radioStations'
+import { FlagIconMini, LanguageIcon, TagIconMini } from './Icons'
 
 interface UserInfoProps {
   station: Station
@@ -55,15 +54,16 @@ const StationInfo: React.FC<UserInfoProps> = ({
       <div className="divider"></div>
       {!!country && (
         <div className="capitalize pb-3 flex">
-          <FlagIconMini />{' '}
-          Location: <div className="badge badge-primary ml-1">{country}</div>
+          <FlagIconMini /> Location:{' '}
+          <div className="badge badge-primary ml-1 whitespace-nowrap">
+            {simplifiedCountryName(country)}
+          </div>
         </div>
       )}
 
       {!languageArrayIsEmpty && (
         <div className="capitalize flex">
-          <LanguageIcon />{' '}
-          Language:{' '}
+          <LanguageIcon /> Language:{' '}
           {language.map((language) =>
             language ? (
               <div key={language} className="badge badge-secondary ml-1">
@@ -76,8 +76,7 @@ const StationInfo: React.FC<UserInfoProps> = ({
 
       {!!tags.length && (
         <div className="pt-3 flex">
-          <TagIconMini />{' '}
-          Tags:{' '}
+          <TagIconMini /> Tags:{' '}
           {tags.map((tag) => (
             <div key={tag} className="badge badge-info badge-sm ml-1 uppercase">
               {tag}
