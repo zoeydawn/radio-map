@@ -53,7 +53,7 @@ const StationInfo: React.FC<UserInfoProps> = ({
       <h3 className="font-bold text-lg pt-2">{name}</h3>
       <div className="divider"></div>
       {!!country && (
-        <div className="capitalize pb-3 flex justify-items-start flex-wrap">
+        <div className="capitalize pb-2 flex justify-items-start flex-wrap">
           <FlagIconMini /> Location:{' '}
           <div className="badge badge-primary ml-1 whitespace-nowrap">
             {simplifiedCountryName(country)}
@@ -62,11 +62,11 @@ const StationInfo: React.FC<UserInfoProps> = ({
       )}
 
       {!languageArrayIsEmpty && (
-        <div className="capitalize flex justify-items-start flex-wrap">
+        <div className="capitalize pb-2 flex justify-items-start flex-wrap">
           <LanguageIcon /> Language:{' '}
           {language.map((language) =>
             language ? (
-              <div key={language} className="badge badge-secondary ml-1 mb-1">
+              <div key={language} className="badge badge-secondary m-0.5">
                 {language}
               </div>
             ) : null,
@@ -75,7 +75,7 @@ const StationInfo: React.FC<UserInfoProps> = ({
       )}
 
       {!!tags.length && (
-        <div className="pt-3 flex justify-items-start flex-wrap">
+        <div className="flex justify-items-start flex-wrap">
           <TagIconMini /> Tags:{' '}
           {tags.map((tag) => (
             <div
