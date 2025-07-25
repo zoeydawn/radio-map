@@ -35,7 +35,7 @@ const StationInfo: React.FC<UserInfoProps> = ({
       <div className="flex justify-between">
         <div className="relative h-28 w-4/5">
           <Image
-            className="size-10 rounded-box"
+            className="size-28"
             alt={station.name}
             src={imageUrl}
             fill // Makes the image fill the parent div
