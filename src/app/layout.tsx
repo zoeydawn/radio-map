@@ -20,6 +20,16 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Radio-Map',
   description: 'Listen to the world',
+  // icons: {
+  //   icon: [
+  //     { url: '/favicon.ico', sizes: 'any' }, // For broadest browser compatibility (can contain multiple sizes)
+  //     { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+  //     { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+  //     { url: '/icon.svg', type: 'image/svg+xml' }, // SVG for modern browsers
+  //   ],
+  //   apple: '/apple-touch-icon.png', // 180x180 for iOS home screens
+  // },
+  // manifest: '/site.webmanifest', // For PWAs (contains icons for Android)
 }
 
 export default function RootLayout({
