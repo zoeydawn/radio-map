@@ -36,7 +36,6 @@ export default function Pins() {
     properties: {
       cluster: false,
       stationId: station.id,
-      // category: station.category,
       station,
     },
     geometry: {
@@ -56,7 +55,6 @@ export default function Pins() {
     options: { radius: 75, maxZoom: 20 },
   })
 
-  // console.log({ clusters, supercluster, bounds, mapRef })
   return (
     <>
       {React.useMemo(
@@ -77,6 +75,21 @@ export default function Pins() {
                   key={`cluster-${cluster.id}`}
                   latitude={latitude}
                   longitude={longitude}
+                  onClick={() => {
+                    if (supercluster) {
+                      const expansionZoom = Math.min(
+                        supercluster.getClusterExpansionZoom(
+                          cluster.id as number,
+                        ),
+                        20,
+                      )
+
+                      mapRef.current?.flyTo({
+                        center: { lat: latitude, lon: longitude },
+                        zoom: expansionZoom,
+                      })
+                    }
+                  }}
                 >
                   <div
                     className={`flex justify-center items-center rounded-full p-2.5 w-${clusterRadius} h-${clusterRadius} text-white bg-amber-950`}
@@ -95,9 +108,6 @@ export default function Pins() {
                 longitude={longitude}
                 anchor="bottom"
                 onClick={(e) => {
-                  // console.log({ e, radioStation })
-                  // If we let the click event propagates to the map, it will immediately close the popup
-                  // with `closeOnClick: true`
                   e.originalEvent.stopPropagation()
                   setViewedStation(cluster.properties.station)
                 }}
@@ -106,7 +116,7 @@ export default function Pins() {
               </Marker>
             )
           }),
-        [clusters, setViewedStation],
+        [clusters, supercluster, mapRef, setViewedStation],
       )}
 
       {/* these are just here to force tailwind to compile these classNames */}
