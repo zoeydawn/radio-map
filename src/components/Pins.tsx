@@ -59,83 +59,56 @@ export default function Pins() {
   // console.log({ clusters, supercluster, bounds, mapRef })
   return (
     <>
-      {clusters.map((cluster) => {
-        // every cluster point has coordinates
-        const [longitude, latitude] = cluster.geometry.coordinates
-        // the point may be either a cluster or a crime point
-        const { cluster: isCluster, point_count: pointCount } =
-          cluster.properties
-
-        // we have a cluster to render
-        if (isCluster) {
-          const clusterRadius = getRadius(pointCount)
-
-          return (
-            <Marker
-              key={`cluster-${cluster.id}`}
-              latitude={latitude}
-              longitude={longitude}
-            >
-              {/* <ClusterMarker>{pointCount}</ClusterMarker> */}{' '}
-              <div
-                // style={{
-                //   width: `${10 + (pointCount / points.length) * 20}px`,
-                //   height: `${10 + (pointCount / points.length) * 20}px`,
-                // }}
-                className={`flex justify-center items-center rounded-full p-2.5 w-${clusterRadius} h-${clusterRadius} text-white bg-amber-950`}
-              >
-                {pointCount}
-              </div>
-            </Marker>
-          )
-        }
-
-        // we have a single point (crime) to render
-        return (
-          <Marker
-            key={`crime-${cluster.properties.stationId}`}
-            latitude={latitude}
-            longitude={longitude}
-            anchor="bottom"
-            onClick={(e) => {
-              // console.log({ e, radioStation })
-              // If we let the click event propagates to the map, it will immediately close the popup
-              // with `closeOnClick: true`
-              e.originalEvent.stopPropagation()
-              setViewedStation(cluster.properties.station)
-            }}
-          >
-            <RadioMapIcon style={pinStyle} className="size-6" />
-          </Marker>
-        )
-      })}
-
-      {/* {React.useMemo(
+      {React.useMemo(
         () =>
-          radioStations.map((radioStation) => {
-            // to make typescript happy
-            if (radioStation.geoLat && radioStation.geoLong) {
+          clusters.map((cluster) => {
+            // every cluster point has coordinates
+            const [longitude, latitude] = cluster.geometry.coordinates
+            // the point may be either a cluster or a crime point
+            const { cluster: isCluster, point_count: pointCount } =
+              cluster.properties
+
+            // we have a cluster to render
+            if (isCluster) {
+              const clusterRadius = getRadius(pointCount)
+
               return (
                 <Marker
-                  key={`marker-${radioStation.id}`}
-                  longitude={radioStation.geoLong}
-                  latitude={radioStation.geoLat}
-                  anchor="bottom"
-                  onClick={(e) => {
-                    // console.log({ e, radioStation })
-                    // If we let the click event propagates to the map, it will immediately close the popup
-                    // with `closeOnClick: true`
-                    e.originalEvent.stopPropagation()
-                    setViewedStation(radioStation)
-                  }}
+                  key={`cluster-${cluster.id}`}
+                  latitude={latitude}
+                  longitude={longitude}
                 >
-                  <RadioMapIcon style={pinStyle} className="size-6" />
+                  <div
+                    className={`flex justify-center items-center rounded-full p-2.5 w-${clusterRadius} h-${clusterRadius} text-white bg-amber-950`}
+                  >
+                    {pointCount}
+                  </div>
                 </Marker>
               )
             }
+
+            // we have a single point (crime) to render
+            return (
+              <Marker
+                key={`crime-${cluster.properties.stationId}`}
+                latitude={latitude}
+                longitude={longitude}
+                anchor="bottom"
+                onClick={(e) => {
+                  // console.log({ e, radioStation })
+                  // If we let the click event propagates to the map, it will immediately close the popup
+                  // with `closeOnClick: true`
+                  e.originalEvent.stopPropagation()
+                  setViewedStation(cluster.properties.station)
+                }}
+              >
+                <RadioMapIcon style={pinStyle} className="size-6" />
+              </Marker>
+            )
           }),
-        [radioStations, setViewedStation],
-      )} */}
+        [clusters, setViewedStation],
+      )}
+
       {/* these are just here to force tailwind to compile these classNames */}
       <div className="w-6 h-6"></div>
       <div className="w-10 h-10"></div>
