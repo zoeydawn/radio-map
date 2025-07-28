@@ -16,7 +16,9 @@
     "radio-browser-api": "^6.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-map-gl": "^8.0.4"
+    "react-map-gl": "^8.0.4",
+    "supercluster": "^8.0.1",
+    "use-supercluster": "^1.2.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

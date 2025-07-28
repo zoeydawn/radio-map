@@ -19,6 +19,8 @@ export default function WorldMap() {
     viewState,
     setIsLoading,
     getStationsByLatAndLong,
+    setViewState,
+    mapRef,
   } = useMapContext()
 
   const mapStyle =
@@ -27,6 +29,10 @@ export default function WorldMap() {
       : 'mapbox://styles/mapbox/streets-v9'
 
   const handleMoveEnd = (evt: ViewStateChangeEvent) => {
+    // console.log('evt:', evt)
+    // keep track of viewState for clustering
+
+    setViewState(evt.viewState)
     // prevent multiple api requests at once
     if (!isLoading) {
       setIsLoading(true)
@@ -45,9 +51,11 @@ export default function WorldMap() {
       <Map
         initialViewState={viewState}
         onMoveEnd={handleMoveEnd}
+        maxZoom={20}
         style={{ width: '100%', height: '100%' }}
         mapStyle={mapStyle}
         mapboxAccessToken={MAPBOX_TOKEN}
+        ref={mapRef}
       >
         <Pins />
       </Map>
