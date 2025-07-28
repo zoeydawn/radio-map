@@ -1,4 +1,4 @@
-import { CSSProperties } from "react"
+import { CSSProperties } from 'react'
 
 interface IconProps {
   fill?: string
@@ -10,8 +10,7 @@ export const RadioMapIcon: React.FC<IconProps> = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 1350 1080" // Keep original viewBox for now
-    fill="currentColor" // <--- THIS IS THE MOST LIKELY FIX
-    // {...props} // Pass down className, etc.
+    fill={props.fill || 'currentColor'} //
     className={props.className}
     style={props.style}
   >

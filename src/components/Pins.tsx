@@ -92,7 +92,7 @@ export default function Pins() {
                   }}
                 >
                   <div
-                    className={`flex justify-center items-center rounded-full p-2.5 w-${clusterRadius} h-${clusterRadius} text-white bg-amber-950`}
+                    className={`flex justify-center items-center rounded-full p-2.5 w-${clusterRadius} h-${clusterRadius} text-primary-content border-primary-content bg-primary cursor-pointer`}
                   >
                     {pointCount}
                   </div>
@@ -100,7 +100,7 @@ export default function Pins() {
               )
             }
 
-            // we have a single point (crime) to render
+            // we have a single point to render
             return (
               <Marker
                 key={`crime-${cluster.properties.stationId}`}
@@ -112,7 +112,7 @@ export default function Pins() {
                   setViewedStation(cluster.properties.station)
                 }}
               >
-                <RadioMapIcon style={pinStyle} className="size-6" />
+                <RadioMapIcon style={pinStyle} className="size-6 text-secondary" />
               </Marker>
             )
           }),
