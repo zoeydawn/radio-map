@@ -5,8 +5,7 @@ import { Metadata } from 'next'
 import { headers } from 'next/headers'
 
 // Define the base URL for production
-// TODO: update this once domain is set up
-const productionUrl = 'https://radio-map-eosin.vercel.app'
+const productionUrl = 'https://radio-map.com'
 
 interface StationPageProps {
   params: Promise<{

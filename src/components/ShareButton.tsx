@@ -11,7 +11,7 @@ interface ShareButtonProps {
   theme: Theme
 }
 
-const baseUrl = 'https://radio-map-eosin.vercel.app'
+const baseUrl = 'https://radio-map.com'
 
 const ShareButton: React.FC<ShareButtonProps> = ({ station, theme }) => {
   // State to manage the message displayed to the user (e.g., "Copied!", "Failed to copy.")
