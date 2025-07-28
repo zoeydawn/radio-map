@@ -72,10 +72,10 @@ const NavDrawer = () => {
           <li>
             <Link
               className="link link-hover"
-              href="/popular"
+              href="/search"
               onClick={closeDrawer}
             >
-              <StarIcon /> Popular
+              <SearchIcon /> Search
             </Link>
           </li>
           <li>
@@ -108,10 +108,10 @@ const NavDrawer = () => {
           <li>
             <Link
               className="link link-hover"
-              href="/search"
+              href="/popular"
               onClick={closeDrawer}
             >
-              <SearchIcon /> Search
+              <StarIcon /> Popular
             </Link>
           </li>
           <li>
