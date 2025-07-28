@@ -53,7 +53,7 @@ export default function Pins() {
     bounds,
     zoom: viewState.zoom,
     options: { radius: 75, maxZoom: 20 },
-  })
+  } as any)
 
   return (
     <>
@@ -64,7 +64,7 @@ export default function Pins() {
             const [longitude, latitude] = cluster.geometry.coordinates
             // the point may be either a cluster or a crime point
             const { cluster: isCluster, point_count: pointCount } =
-              cluster.properties
+              cluster.properties as any
 
             // we have a cluster to render
             if (isCluster) {
