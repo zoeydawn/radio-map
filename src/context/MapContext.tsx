@@ -6,15 +6,13 @@ import React, {
   useState,
   ReactNode,
   useEffect,
-  useRef,
-  RefObject,
 } from 'react'
 import {
   MapContextProps,
   Possition,
   UserLocationType,
 } from './MapContext.types'
-import { MapRef, ViewState } from 'react-map-gl/mapbox'
+import { ViewState } from 'react-map-gl/mapbox'
 import { stationsByGeographicArea } from '@/services/radioBrowserService'
 import { Station } from 'radio-browser-api'
 import { removeDuplicatesById } from '@/utils/radioStations'
@@ -45,8 +43,6 @@ export const MapViewProvider: React.FC<{ children: ReactNode }> = ({
     lat: 0,
     lon: 0,
   }) // keep track of the last possition from where we fetched station so that we can compare it against the current possition
-
-  const mapRef: RefObject<MapRef | null> = useRef(null)
 
   // add new stations to the state without removing old ones
   // because we want new new stations to appear while moving the map, without deleting the old ones.
@@ -148,7 +144,6 @@ export const MapViewProvider: React.FC<{ children: ReactNode }> = ({
         radioStations,
         viewState,
         previousPossition,
-        mapRef,
         setIsLoading,
         setRadioStations,
         setViewState, // do we still need this?

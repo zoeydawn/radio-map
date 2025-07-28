@@ -1,6 +1,5 @@
 import { Station } from 'radio-browser-api'
-import { RefObject } from 'react'
-import { MapRef, ViewState } from 'react-map-gl/mapbox'
+import { ViewState } from 'react-map-gl/mapbox'
 
 export type Possition = { lat: number; lon: number }
 
@@ -32,7 +31,6 @@ export interface MapContextProps {
   radioStations: Station[]
   viewState: ViewState
   previousPossition: Possition
-  mapRef: RefObject<MapRef | null>
   setIsLoading: (isLoading: boolean) => void
   setRadioStations: (stations: Station[]) => void
   setViewState: (viewState: ViewState) => void

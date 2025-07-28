@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useAppContext } from '../context/AppContext'
 
-import { Marker } from 'react-map-gl/mapbox'
+import { Marker, useMap } from 'react-map-gl/mapbox'
 import { useMapContext } from '@/context/MapContext'
 import { RadioMapIcon } from './Icons'
 import useSupercluster from 'use-supercluster'
@@ -29,7 +29,9 @@ const pinStyle = {
 
 export default function Pins() {
   const { setViewedStation } = useAppContext()
-  const { radioStations, mapRef, viewState } = useMapContext()
+  const { radioStations, viewState } = useMapContext()
+
+  const { current: map } = useMap()
 
   const points = radioStations.map((station) => ({
     type: 'Feature',
@@ -44,9 +46,7 @@ export default function Pins() {
     },
   }))
 
-  const bounds = mapRef.current
-    ? mapRef.current?.getMap()?.getBounds()?.toArray().flat()
-    : null
+  const bounds = map?.getMap()?.getBounds()?.toArray().flat()
 
   const { clusters, supercluster } = useSupercluster({
     points,
@@ -84,7 +84,7 @@ export default function Pins() {
                         20,
                       )
 
-                      mapRef.current?.flyTo({
+                      map?.flyTo({
                         center: { lat: latitude, lon: longitude },
                         zoom: expansionZoom,
                       })
@@ -112,11 +112,14 @@ export default function Pins() {
                   setViewedStation(cluster.properties.station)
                 }}
               >
-                <RadioMapIcon style={pinStyle} className="size-6 text-secondary" />
+                <RadioMapIcon
+                  style={pinStyle}
+                  className="size-6 text-secondary"
+                />
               </Marker>
             )
           }),
-        [clusters, supercluster, mapRef, setViewedStation],
+        [clusters, supercluster, map, setViewedStation],
       )}
 
       {/* these are just here to force tailwind to compile these classNames */}

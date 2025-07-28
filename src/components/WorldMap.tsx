@@ -20,7 +20,6 @@ export default function WorldMap() {
     setIsLoading,
     getStationsByLatAndLong,
     setViewState,
-    mapRef,
   } = useMapContext()
 
   const mapStyle =
@@ -55,7 +54,6 @@ export default function WorldMap() {
         style={{ width: '100%', height: '100%' }}
         mapStyle={mapStyle}
         mapboxAccessToken={MAPBOX_TOKEN}
-        ref={mapRef}
       >
         <Pins />
       </Map>
