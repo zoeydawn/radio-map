@@ -6,27 +6,20 @@ import { useMapContext } from '@/context/MapContext'
 import { RadioMapIcon } from './Icons'
 import useSupercluster from 'use-supercluster'
 
-// import { radioStationList } from '@/context/radioStationList'
-// const radioStations = radioStationList
-
-interface ClusterMarkerProps {
-  children: React.ReactNode
-  style: React.CSSProperties
-  // Add any other props you might need, like onClick, etc.
-}
-
-const ClusterMarker: React.FC<ClusterMarkerProps> = ({ children, style }) => {
-  return (
-    <div
-      className="flex justify-center items-center rounded-full p-2.5 text-white"
-      style={{
-        backgroundColor: '#1978c8', // Custom background color
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  )
+const getRadius = (pointCount: number) => {
+  if (pointCount > 50) {
+    return '24'
+  }
+  if (pointCount > 25) {
+    return '20'
+  }
+  if (pointCount > 10) {
+    return '16'
+  }
+  if (pointCount > 5) {
+    return '10'
+  }
+  return '6'
 }
 
 const pinStyle = {
@@ -75,21 +68,24 @@ export default function Pins() {
 
         // we have a cluster to render
         if (isCluster) {
-          console.log('cluster:', cluster)
+          const clusterRadius = getRadius(pointCount)
+
           return (
             <Marker
               key={`cluster-${cluster.id}`}
               latitude={latitude}
               longitude={longitude}
             >
-              <ClusterMarker
-                style={{
-                  width: `${10 + (pointCount / points.length) * 20}px`,
-                  height: `${10 + (pointCount / points.length) * 20}px`,
-                }}
+              {/* <ClusterMarker>{pointCount}</ClusterMarker> */}{' '}
+              <div
+                // style={{
+                //   width: `${10 + (pointCount / points.length) * 20}px`,
+                //   height: `${10 + (pointCount / points.length) * 20}px`,
+                // }}
+                className={`flex justify-center items-center rounded-full p-2.5 w-${clusterRadius} h-${clusterRadius} text-white bg-amber-950`}
               >
                 {pointCount}
-              </ClusterMarker>
+              </div>
             </Marker>
           )
         }
@@ -109,9 +105,6 @@ export default function Pins() {
               setViewedStation(cluster.properties.station)
             }}
           >
-            {/* <button className="crime-marker">
-              <img src="/custody.svg" alt="crime doesn't pay" />
-            </button> */}
             <RadioMapIcon style={pinStyle} className="size-6" />
           </Marker>
         )
@@ -143,6 +136,12 @@ export default function Pins() {
           }),
         [radioStations, setViewedStation],
       )} */}
+      {/* these are just here to force tailwind to compile these classNames */}
+      <div className="w-6 h-6"></div>
+      <div className="w-10 h-10"></div>
+      <div className="w-16 h-16"></div>
+      <div className="w-20 h-20"></div>
+      <div className="w-24 h-24"></div>
     </>
   )
 }
