@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRef } from 'react'
 import {
   FlagIcon,
+  GitHubIcon,
   HeartIcon,
   LanguageIcon,
   MapIcon,
@@ -127,6 +128,27 @@ const NavDrawer = () => {
             <ThemeToggler />
           </li>
         </ul>
+
+        <div className="absolute bottom-2 p-6">
+          <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+            <li>
+              <a
+                className="link link-hover"
+                href="https://github.com/zoeydawn/radio-map"
+                target="_blank"
+                onClick={closeDrawer}
+              >
+                <GitHubIcon className="size-5" />
+                Source Code
+              </a>
+            </li>
+            {/* <li>
+              <a className="link link-hover" onClick={closeDrawer}>
+                About
+              </a>
+            </li> */}
+          </ul>
+        </div>
       </div>
     </div>
   )
