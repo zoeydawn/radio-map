@@ -1,3 +1,4 @@
+import { ratelimit } from '@/utils/rateLimit'
 import { NextRequest, NextResponse } from 'next/server'
 
 async function fetchImage(url: string): Promise<Response> {
@@ -11,6 +12,28 @@ async function fetchImage(url: string): Promise<Response> {
 }
 
 export async function GET(request: NextRequest) {
+  // --- START RATE LIMITING ---
+  let ipIdentifier: string = '127.0.0.1'
+  const xForwardedFor = request.headers.get('x-forwarded-for')
+  if (xForwardedFor) {
+    ipIdentifier = xForwardedFor.split(',')[0].trim()
+  }
+
+  const { success, limit, reset, remaining } =
+    await ratelimit.limit(ipIdentifier)
+
+  // Add rate limit headers to the response (optional, but good practice)
+  const headers = new Headers()
+  headers.set('X-RateLimit-Limit', limit.toString())
+  headers.set('X-RateLimit-Remaining', remaining.toString())
+  headers.set('X-RateLimit-Reset', reset.toString())
+
+  if (!success) {
+    console.warn(`Rate limit exceeded for IP: ${ipIdentifier}`)
+    return new NextResponse('Too Many Requests', { status: 429, headers })
+  }
+  // --- END RATE LIMITING ---
+
   const { searchParams } = new URL(request.url)
   const imageUrl = searchParams.get('url')
 
@@ -76,7 +99,7 @@ export async function GET(request: NextRequest) {
         {
           error: 'Could not retrieve any image, including the default favicon.',
         },
-        { status: 500 },
+        { status: 500, headers },
       )
     }
   }
@@ -84,17 +107,15 @@ export async function GET(request: NextRequest) {
   // Get the content type from the successfully retrieved image (either original or default)
   const finalContentType = imageResponse.headers.get('Content-Type')
 
-  // Create new headers for the response
-  const responseHeaders = new Headers()
   if (finalContentType) {
-    responseHeaders.set('Content-Type', finalContentType)
+    headers.set('Content-Type', finalContentType)
   }
 
-  responseHeaders.set('Cache-Control', 'public, max-age=31536000, immutable') // Cache for 1 year, immutable
+  headers.set('Cache-Control', 'public, max-age=31536000, immutable') // Cache for 1 year, immutable
 
   // Return the image directly
   return new NextResponse(imageResponse.body, {
     status: 200,
-    headers: responseHeaders,
+    headers: headers,
   })
 }
