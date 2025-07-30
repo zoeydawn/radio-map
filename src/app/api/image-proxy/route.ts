@@ -34,7 +34,8 @@ export async function GET(request: NextRequest) {
     //   console.warn(`External image domain not allowed: ${parsedUrl.hostname}. Serving default image (favicon).`);
     //   targetImageUrl = ABSOLUTE_DEFAULT_IMAGE_URL;
     // } else {
-    targetImageUrl = imageUrl
+    // targetImageUrl = imageUrl
+    targetImageUrl = ABSOLUTE_DEFAULT_IMAGE_URL
     // }
   }
 
