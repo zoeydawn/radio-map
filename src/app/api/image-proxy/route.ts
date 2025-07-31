@@ -2,13 +2,59 @@ import { ratelimit } from '@/utils/rateLimit'
 import { NextRequest, NextResponse } from 'next/server'
 
 async function fetchImage(url: string): Promise<Response> {
-  const response = await fetch(url)
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch image: ${response.status} ${response.statusText}`,
-    )
+  const controller = new AbortController()
+  const id = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+
+  // Define the maximum allowed image size in bytes
+  const MAX_IMAGE_SIZE_BYTES = 10 * 1024 // 10 KB
+
+  try {
+    const response = await fetch(url, {
+      cache: 'no-store',
+      signal: controller.signal,
+    })
+    clearTimeout(id) // Clear timeout if fetch completes in time
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch image: ${response.status} ${response.statusText}`,
+      )
+    }
+
+    const contentLengthHeader = response.headers.get('Content-Length')
+
+    // Check Content-Length header if available
+    if (contentLengthHeader) {
+      const contentLength = parseInt(contentLengthHeader, 10)
+      if (isNaN(contentLength)) {
+        console.warn(
+          `Content-Length header is not a valid number for URL: ${url}`,
+        )
+        // Optionally, you can treat this as an error and fall back,
+        // or proceed and allow the image to be downloaded to check its actual size later.
+        // For strictness, you might throw an error here.
+        // For this example, we'll proceed if we can't parse it.
+      } else if (contentLength > MAX_IMAGE_SIZE_BYTES) {
+        console.warn(
+          `Fetched image from ${url} is too large (${contentLength} bytes, limit ${MAX_IMAGE_SIZE_BYTES} bytes).`,
+        )
+        throw new Error('Image too large') // Throw to trigger the default image fallback
+      }
+    }
+    // else: If Content-Length header is not present, the image will be downloaded regardless
+    // and its size won't be known until the full body is received.
+    // For very strict limits, you might want to consider streaming the response body
+    // and aborting if it exceeds the limit, but that adds complexity.
+    // For most cases, relying on Content-Length is a good first step.
+
+    return response
+  } catch (error) {
+    clearTimeout(id) // Ensure timeout is cleared even on error
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error(`Image fetch timed out after 10 seconds for URL: ${url}`)
+    }
+    throw error
   }
-  return response
 }
 
 export async function GET(request: NextRequest) {
@@ -48,17 +94,7 @@ export async function GET(request: NextRequest) {
     console.warn('Image URL is missing. Serving default image (favicon).')
     targetImageUrl = ABSOLUTE_DEFAULT_IMAGE_URL
   } else {
-    // TODO: Add a simple validation to prevent abuse?
-    // For example, only allow image URLs from certain trusted external domains.
-    // This is crucial for security and to prevent your proxy from being used maliciously.
-    // const allowedDomains = ['example.com', 'another-api-source.org'];
-    // const parsedUrl = new URL(imageUrl);
-    // if (!allowedDomains.includes(parsedUrl.hostname)) {
-    //   console.warn(`External image domain not allowed: ${parsedUrl.hostname}. Serving default image (favicon).`);
-    //   targetImageUrl = ABSOLUTE_DEFAULT_IMAGE_URL;
-    // } else {
     targetImageUrl = imageUrl
-    // }
   }
 
   let imageResponse: Response
