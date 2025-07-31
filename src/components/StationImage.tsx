@@ -18,6 +18,7 @@ const StationImage: React.FC<StationImageProps> = ({ station }) => {
       width={40}
       placeholder="blur"
       blurDataURL={'/favicon.ico'}
+      unoptimized
     />
   )
 }
