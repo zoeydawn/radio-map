@@ -24,7 +24,7 @@ const StationList: React.FC<UserInfoProps> = ({
   hideLoadButton,
 }) => {
   return (
-    <div className="pb-50">
+    <div className="pb-120">
       <ul className="list bg-base-100 rounded-box shadow-md max-w-150 m-auto mt-4">
         {!!header && (
           <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">
