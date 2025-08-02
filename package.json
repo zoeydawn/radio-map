@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@types/mapbox-gl": "^3.4.1",
+    "@upstash/ratelimit": "^2.0.6",
+    "@vercel/kv": "^3.0.0",
     "hls.js": "^1.6.7",
     "mapbox-gl": "^3.12.0",
     "next": "15.3.2",

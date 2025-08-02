@@ -42,6 +42,7 @@ const StationInfo: React.FC<UserInfoProps> = ({
             sizes="(max-width: 400px) 100vw, 400px"
             placeholder="blur"
             blurDataURL={'/favicon.ico'}
+            unoptimized
           />
         </div>
         {!!handleClose && (
