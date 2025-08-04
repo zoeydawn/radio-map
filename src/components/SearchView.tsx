@@ -4,7 +4,8 @@ import { SearchIcon } from '@/components/Icons'
 import Loader from '@/components/Loader'
 import StationList from '@/components/StationList'
 import { useAppContext } from '@/context/AppContext'
-import { searchStations, step } from '@/services/radioBrowserService'
+import { fetchSearch } from '@/services/apiService'
+import { step } from '@/services/radioBrowserService'
 import { CountryResult, Station } from 'radio-browser-api'
 import { useState } from 'react'
 
@@ -34,15 +35,22 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
   }
 
   const getStations = async (currentOffset: number) => {
-    const stations = await searchStations({
-      tag: tagString,
-      language: selectedLanguage,
-      country: selectedCountry,
-      name: nameString,
-      offset: currentOffset,
-    })
+    try {
+      const response = await fetchSearch({
+        tag: tagString,
+        language: selectedLanguage,
+        country: selectedCountry,
+        name: nameString,
+        offset: currentOffset,
+      })
+      console.log('response:', response)
 
-    return stations
+      // return stations
+      return response.data
+    } catch (error) {
+      console.error('error fetching search:', error)
+      return []
+    }
   }
 
   // only to be run when the button is clicked
