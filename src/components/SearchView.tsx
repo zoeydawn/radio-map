@@ -83,6 +83,13 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
     selectedLanguage
   )
 
+  // Initiate search when `Enter` is presses
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (readyToSearch && event.key === 'Enter') {
+      initiateSearch()
+    }
+  }
+
   return (
     <>
       <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 m-auto">
@@ -95,6 +102,7 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
           placeholder="WXYC, Radio Canada, BBC, etc..."
           value={nameString}
           onChange={(event) => setNameString(event.target.value)}
+          onKeyDown={handleKeyDown}
         />
 
         <label className="label">Tag</label>
@@ -104,6 +112,7 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
           placeholder="Reggae, jazz, news, etc..."
           value={tagString}
           onChange={(event) => setTagString(event.target.value)}
+          onKeyDown={handleKeyDown}
         />
 
         <label className="label">Country</label>
