@@ -46,6 +46,8 @@ export default async function StationPage(props: StationPageProps) {
   } catch (error) {
     console.error('error fetching stations by language:', error)
 
-    return <h3>Error fetching stations in {decodedName}. Please try again later.</h3>
+    return (
+      <h3>Error fetching stations in {decodedName}. Please try again later.</h3>
+    )
   }
 }

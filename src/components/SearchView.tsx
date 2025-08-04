@@ -43,7 +43,7 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
         name: nameString,
         offset: currentOffset,
       })
-      console.log('response:', response)
+      // console.log('response:', response)
 
       // return stations
       return response.data

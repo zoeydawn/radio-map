@@ -2,7 +2,8 @@
 
 import StationList from '@/components/StationList'
 import { useAppContext } from '@/context/AppContext'
-import { searchStations, step } from '@/services/radioBrowserService'
+import { fetchSearch } from '@/services/apiService'
+import { step } from '@/services/radioBrowserService'
 import { AdvancedStationQuery, Station } from 'radio-browser-api'
 import { useEffect, useState } from 'react'
 
@@ -28,15 +29,23 @@ const ReloadableStationList: React.FC<ReloadableStationListProps> = ({
 
   const getStations = async () => {
     setLoading(true)
-    const stations = await searchStations({ ...searchParams, offset })
+    // const stations = await searchStations({ ...searchParams, offset })
+    try {
+      const response = await fetchSearch({ ...searchParams, offset })
+      // console.log('response:', response)
 
-    setRadioStations([...radioStations, ...stations])
-    setOffset(offset + 1)
-    if (stations.length < step) {
-      setAreMoreStationsToLoad(false)
+      const stations = response.data
+      setRadioStations([...radioStations, ...stations])
+      setOffset(offset + 1)
+      if (stations.length < step) {
+        setAreMoreStationsToLoad(false)
+      }
+    } catch (error) {
+      console.error('error fetching search:', error)
+      // setAreMoreStationsToLoad(false)
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   useEffect(() => {
