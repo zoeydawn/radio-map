@@ -84,7 +84,7 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
   )
 
   // Initiate search when `Enter` is presses
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (readyToSearch && event.key === 'Enter') {
       initiateSearch()
     }
