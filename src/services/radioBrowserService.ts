@@ -16,7 +16,7 @@ export const stationsByGeographicArea = async (
     hasGeoInfo: true,
     geo_distance: 250000,
     // limit: 100,
-  } as RadioBrowserStationQuery) // because we get a stupid error because 'AdvancedStationQuery' is not up to date.
+  } as RadioBrowserStationQuery)
   // console.log({ response, geo_lat, geo_long })
 
   return response || []

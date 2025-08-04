@@ -1,8 +1,8 @@
 import ButtonList from '@/components/ButtonList'
 import { tags } from '@/services/radioBrowserService'
 import { CountryResult } from 'radio-browser-api'
-
-// returns a className to set the size of the button based on how many stations are listed for the tag
+/*
+// returns a className to set the size of the button based on how many stations are listed for the tag */
 const getButtonSize = ({ stationcount }: CountryResult) => {
   if (stationcount > 100) {
     return 'btn btn-xl'

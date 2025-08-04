@@ -5,7 +5,6 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
     const allParams = Object.fromEntries(searchParams.entries())
-    console.log('allParams:', allParams)
 
     // TODO: we might have to format some of the params
     const results = await searchStations(allParams)

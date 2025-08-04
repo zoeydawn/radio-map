@@ -1,5 +1,3 @@
-// utils/url-helpers.ts
-
 // Define a type for the possible values, including strings, numbers, and booleans.
 type ParamValue = string | number | boolean
 type ParamValues = ParamValue | ParamValue[]
