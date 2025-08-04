@@ -4,7 +4,7 @@ export type RadioBrowserStationQuery = AdvancedStationQuery
 
 const api = new RadioBrowserApi('Radio Map')
 
-export const step = 100
+export const step = 50
 
 export const stationsByGeographicArea = async (
   geo_lat: number,
