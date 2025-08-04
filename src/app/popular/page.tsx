@@ -1,33 +1,22 @@
-'use client'
+import ReloadableStationList from '@/components/ReloadableStationList'
+import { searchStations } from '@/services/radioBrowserService'
 
-import StationList from '@/components/StationList'
-import { useAppContext } from '@/context/AppContext'
-import { stationsByVotes } from '@/services/radioBrowserService'
-import { Station } from 'radio-browser-api'
-import { useEffect, useState } from 'react'
+export default async function Popular() {
+  try {
+    // stations are sorted by votes by default
+    // so calling the functions without params will give us stations with the most votes
+    const radioStations = (await searchStations({})) || []
 
-export default function Popular() {
-  const [radioStations, setRadioStations] = useState<Station[]>([])
-  const { setViewedStation } = useAppContext()
-
-  const getStations = async () => {
-    const stations = await stationsByVotes()
-    // console.log('stations:', stations)
-
-    setRadioStations(stations)
-  }
-
-  useEffect(() => {
-    getStations()
-  }, [])
-
-  return (
-    <>
-      <StationList
-        stations={radioStations}
-        setViewedStation={setViewedStation}
-        header="Popular stations"
+    return (
+      <ReloadableStationList
+        initialStations={radioStations}
+        header="Popular Stations"
+        searchParams={{}}
       />
-    </>
-  )
+    )
+  } catch (error) {
+    console.error('error fetching stations by vote:', error)
+
+    return <h3>Error fetching stations. Please try again later.</h3>
+  }
 }
