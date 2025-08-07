@@ -16,7 +16,7 @@ const StationModel: React.FC = ({}) => {
   }
 
   return (
-    <dialog id="my_modal_5" className="modal modal-open">
+    <dialog id="my_modal_5" className="modal modal-open" onClick={handleClose}>
       <div className="modal-box">
         <StationInfo
           station={viewedStation}
