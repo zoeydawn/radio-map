@@ -168,6 +168,12 @@ const SearchView: React.FC<SearchViewProps> = ({ countries, languages }) => {
           hideLoadButton={!areMoreStationsToLoad}
         />
       )}
+
+      {
+        // add extra space when there are no stations
+        // because the player can cover up the play button on small screens
+        !radioStations.length && <div className="pb-120" />
+      }
     </>
   )
 }
