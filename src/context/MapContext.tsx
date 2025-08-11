@@ -134,7 +134,6 @@ export const MapViewProvider: React.FC<{ children: ReactNode }> = ({
         isLoading,
         radioStations,
         viewState,
-        // previousPossition,
         setIsLoading,
         setRadioStations,
         setViewState, // do we still need this?
