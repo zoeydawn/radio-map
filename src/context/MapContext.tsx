@@ -7,17 +7,12 @@ import React, {
   ReactNode,
   useEffect,
 } from 'react'
-import {
-  MapContextProps,
-  Possition,
-  UserLocationType,
-} from './MapContext.types'
+import { MapContextProps, UserLocationType } from './MapContext.types'
 import { ViewState } from 'react-map-gl/mapbox'
-import { stationsByGeographicArea } from '@/services/radioBrowserService'
 import { Station } from 'radio-browser-api'
 import { removeDuplicatesById } from '@/utils/radioStations'
 import { fetchEstimatedUserLocation } from '@/services/ipifyService'
-import { areLocationsWithin50Km } from '@/utils/map'
+import { fetchByGeoLocation } from '@/services/apiService'
 
 const defaultViewState: ViewState = {
   longitude: -73.7, // default to Montreal
@@ -39,10 +34,7 @@ export const MapViewProvider: React.FC<{ children: ReactNode }> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true) // when initially fetching stations by geographic possition
   const [radioStations, setRadioStations] = useState<Station[]>([]) // stations by geographic possition
   const [viewState, setViewState] = useState<ViewState>(defaultViewState) // view state for the map
-  const [previousPossition, setPreviousPossition] = useState<Possition>({
-    lat: 0,
-    lon: 0,
-  }) // keep track of the last possition from where we fetched station so that we can compare it against the current possition
+  const [fetchedAreas, setFetchedGeoLocations] = useState<string[]>([]) // keep track of which geo-locations we have already fetched data for
 
   // add new stations to the state without removing old ones
   // because we want new new stations to appear while moving the map, without deleting the old ones.
@@ -54,24 +46,23 @@ export const MapViewProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   const getStationsByLatAndLong = async (lat: number, lon: number) => {
-    // TODO: add error logic
+    // round the lat and lon so as not to have fewer unique queries and therefore better caching
+    const roundedLat = Math.round(lat)
+    const roundedLon = Math.round(lon)
+    const geoString = `${roundedLat}-${roundedLon}`
 
     try {
-      // make sure map has moved significatly before fetching
-      if (
-        areLocationsWithin50Km(
-          lat,
-          lon,
-          previousPossition.lat,
-          previousPossition.lon,
-        )
-      ) {
-        console.log('not fetching more stations, map hasnt moved enough')
+      // make sure we haven't already fetch stations for this geo-location
+      if (fetchedAreas.includes(geoString)) {
+        console.log('not fetching more stations, already fetched this area')
       } else {
-        const data = await stationsByGeographicArea(lat, lon)
+        const data = await fetchByGeoLocation({
+          geo_lat: roundedLat,
+          geo_long: roundedLon,
+        })
 
-        addNewRadioStations(data)
-        setPreviousPossition({ lat, lon })
+        addNewRadioStations(data.data)
+        setFetchedGeoLocations([...fetchedAreas, geoString])
       }
     } catch (error) {
       // TODO: error handling logic
@@ -143,7 +134,7 @@ export const MapViewProvider: React.FC<{ children: ReactNode }> = ({
         isLoading,
         radioStations,
         viewState,
-        previousPossition,
+        // previousPossition,
         setIsLoading,
         setRadioStations,
         setViewState, // do we still need this?

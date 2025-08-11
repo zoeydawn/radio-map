@@ -30,7 +30,6 @@ export interface MapContextProps {
   isLoading: boolean
   radioStations: Station[]
   viewState: ViewState
-  previousPossition: Possition
   setIsLoading: (isLoading: boolean) => void
   setRadioStations: (stations: Station[]) => void
   setViewState: (viewState: ViewState) => void
