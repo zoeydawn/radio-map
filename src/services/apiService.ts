@@ -33,3 +33,32 @@ export async function fetchSearch(
     throw error // Re-throw the error so the calling component can handle it.
   }
 }
+
+type geoLocationParams = {
+  geo_lat: number
+  geo_long: number
+}
+
+export async function fetchByGeoLocation(
+  params: geoLocationParams,
+): Promise<SearchApiData> {
+  const urlSearchParams = toURLSearchParams(params)
+
+  const url = `/api/stations-by-geo-location?${urlSearchParams.toString()}`
+  try {
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      throw new Error(
+        `HTTP error! status: ${response.status}: ${errorData.message || response.statusText}`,
+      )
+    }
+
+    const result: SearchApiData = await response.json()
+    return result
+  } catch (error) {
+    console.error('Fetch failed:', error)
+    throw error // Re-throw the error so the calling component can handle it.
+  }
+}

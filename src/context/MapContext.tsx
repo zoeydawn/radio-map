@@ -9,10 +9,10 @@ import React, {
 } from 'react'
 import { MapContextProps, UserLocationType } from './MapContext.types'
 import { ViewState } from 'react-map-gl/mapbox'
-import { stationsByGeographicArea } from '@/services/radioBrowserService'
 import { Station } from 'radio-browser-api'
 import { removeDuplicatesById } from '@/utils/radioStations'
 import { fetchEstimatedUserLocation } from '@/services/ipifyService'
+import { fetchByGeoLocation } from '@/services/apiService'
 
 const defaultViewState: ViewState = {
   longitude: -73.7, // default to Montreal
@@ -56,9 +56,12 @@ export const MapViewProvider: React.FC<{ children: ReactNode }> = ({
       if (fetchedAreas.includes(geoString)) {
         console.log('not fetching more stations, already fetched this area')
       } else {
-        const data = await stationsByGeographicArea(roundedLat, roundedLon)
+        const data = await fetchByGeoLocation({
+          geo_lat: roundedLat,
+          geo_long: roundedLon,
+        })
 
-        addNewRadioStations(data)
+        addNewRadioStations(data.data)
         setFetchedGeoLocations([...fetchedAreas, geoString])
       }
     } catch (error) {
