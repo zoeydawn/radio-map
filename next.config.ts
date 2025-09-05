@@ -1,6 +1,15 @@
 import type { NextConfig } from 'next'
+import withPWA from 'next-pwa'
+
+// PWA configuration
+const pwaConfig = withPWA({
+  dest: 'public',
+  // You can add more PWA options here
+  // disable: process.env.NODE_ENV === 'development',
+})
 
 const nextConfig: NextConfig = {
+  reactStrictMode: true,
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
@@ -35,4 +44,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+export default pwaConfig(nextConfig as any)
