@@ -9,6 +9,7 @@ import React, {
 } from 'react'
 import { AppContextProps, Theme } from './AppContext.types'
 import { Station } from 'radio-browser-api'
+import { removeDuplicatesById } from '@/utils/radioStations'
 
 // Create the context with a default value (can be undefined or a mock, but we'll handle it in the provider)
 // We assert the type here, knowing the Provider will supply the actual value.
@@ -24,18 +25,21 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [playError, setPlayError] = useState('')
   const [favorites, setFavorites] = useState<Station[]>([])
+  const [history, setHistory] = useState<Station[]>([])
+
+  // save to local storage
+  const saveToLocalStorage = (key: string, value: string) => {
+    try {
+      localStorage.setItem(key, value)
+    } catch (error) {
+      console.error(`Error saving ${key} to local storage:`, error)
+    }
+  }
 
   // save theme to local storage and update state
   const setAndSaveTheme = (theme: Theme) => {
     setTheme(theme)
-
-    try {
-      // save theme to local storage
-      localStorage.setItem('theme', theme)
-      // console.log('Theme saved successfully!')
-    } catch (error) {
-      console.error('Error saving theme to local storage:', error)
-    }
+    saveToLocalStorage('theme', theme)
   }
 
   // read theme to local storage and update state
@@ -53,16 +57,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
   // save favorites to state and local storage
   const saveFavorites = (newFavorites: Station[]) => {
-    // save to state
     setFavorites(newFavorites)
 
-    // save local storage
-    try {
-      const stringifiedFavorites = JSON.stringify(newFavorites)
-      localStorage.setItem('favorites', stringifiedFavorites)
-    } catch (error) {
-      console.error('Error saving favorites to local storage:', error)
-    }
+    saveToLocalStorage('favorites', JSON.stringify(newFavorites))
   }
 
   // add station to favorites
@@ -70,6 +67,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     const updatedFavorites = [...favorites, station]
 
     saveFavorites(updatedFavorites)
+  }
+
+  // add station to history
+  const addToHistory = (station: Station) => {
+    const updatedHistory = removeDuplicatesById([station, ...history])
+
+    setHistory(updatedHistory)
+    saveToLocalStorage('history', JSON.stringify(updatedHistory))
   }
 
   // remove station from favorites
@@ -115,6 +120,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         playError,
         favorites,
         favoritesIdsSet,
+        history,
         setTheme: setAndSaveTheme,
         setSelectedStation,
         setViewedStation,
@@ -122,6 +128,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         setPlayError,
         addFavorite,
         removeFavorite,
+        addToHistory,
       }}
     >
       <div className="h-full bg-base-200" data-theme={theme}>

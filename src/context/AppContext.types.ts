@@ -11,11 +11,13 @@ export interface AppContextProps {
   playError: string
   favorites: Station[]
   favoritesIdsSet: Set<string>
+  history: Station[]
   setTheme: (theme: Theme) => void
   setSelectedStation: (station: Station | null) => void
   setViewedStation: (station: Station | null) => void
   setIsPlaying: (isPlaying: boolean) => void
   setPlayError: (error: string) => void
   addFavorite: (station: Station) => void
+  addToHistory: (station: Station) => void
   removeFavorite: (station: Station) => void
 }
