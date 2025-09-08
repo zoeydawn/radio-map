@@ -70,11 +70,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   // add station to history
-  const addToHistory = (station: Station) => {
-    const updatedHistory = removeDuplicatesById([station, ...history])
+  const addToHistory = (station: Station | null) => {
+    if (!!station) {
+      const updatedHistory = removeDuplicatesById([station, ...history])
 
-    setHistory(updatedHistory)
-    saveToLocalStorage('history', JSON.stringify(updatedHistory))
+      setHistory(updatedHistory)
+      saveToLocalStorage('history', JSON.stringify(updatedHistory))
+    }
   }
 
   // remove station from favorites
@@ -97,6 +99,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     } catch (error) {
       console.error('Error reading favorites from local storage:', error)
     }
+  }
+
+  const setAndRecordStation = (station: Station | null) => {
+    setSelectedStation(station)
+    addToHistory(station)
   }
 
   // Fetch data when the provider mounts
@@ -122,13 +129,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         favoritesIdsSet,
         history,
         setTheme: setAndSaveTheme,
-        setSelectedStation,
+        setSelectedStation: setAndRecordStation,
         setViewedStation,
         setIsPlaying,
         setPlayError,
         addFavorite,
         removeFavorite,
-        addToHistory,
       }}
     >
       <div className="h-full bg-base-200" data-theme={theme}>
