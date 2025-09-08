@@ -88,7 +88,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     saveFavorites(updatedFavorites)
   }
 
-  // read theme to local storage and update state
+  // read favorites from local storage and update state
   const readAndSaveFavorites = () => {
     try {
       const savedFavorites = localStorage.getItem('favorites')
@@ -98,6 +98,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       }
     } catch (error) {
       console.error('Error reading favorites from local storage:', error)
+    }
+  }
+
+  // read history from local storage and update state
+  const readAndSaveHistory = () => {
+    try {
+      const savedHistory = localStorage.getItem('history')
+
+      if (savedHistory) {
+        setHistory(JSON.parse(savedHistory))
+      }
+    } catch (error) {
+      console.error('Error reading history from local storage:', error)
     }
   }
 
@@ -111,6 +124,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     // read from local storage and update state accordingly
     readAndSaveTheme()
     readAndSaveFavorites()
+    readAndSaveHistory()
   }, []) // Empty dependency array means this runs once on mount
 
   // a set containing the ids of the stations in favorites
