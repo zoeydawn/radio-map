@@ -19,7 +19,7 @@ export default function History() {
       <StationList
         stations={history}
         setViewedStation={setViewedStation}
-        header="Your Favorites"
+        header="Your listening history"
         showSearch
       />
     </>
