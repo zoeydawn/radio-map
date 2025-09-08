@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRef } from 'react'
 import {
+  ClockIcon,
   FlagIcon,
   GitHubIcon,
   HeartIcon,
@@ -113,6 +114,15 @@ const NavDrawer = () => {
               onClick={closeDrawer}
             >
               <StarIcon /> Popular
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="link link-hover"
+              href="/history"
+              onClick={closeDrawer}
+            >
+              <ClockIcon /> History
             </Link>
           </li>
           <li>
