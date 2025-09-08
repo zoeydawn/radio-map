@@ -50,3 +50,16 @@ export function simplifiedCountryName(country: string) {
 
   return simplifiedNames[country] || country
 }
+
+// determine if a station contains a given string
+export function stationContainsString(station: Station, search: string) {
+  const searchString = search.toLowerCase()
+
+  return (
+    station.name.toLowerCase().includes(searchString) ||
+    station.language.some((lang) =>
+      lang.toLowerCase().includes(searchString),
+    ) ||
+    station.tags.some((tag) => tag.toLowerCase().includes(searchString))
+  )
+}

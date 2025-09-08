@@ -1,4 +1,7 @@
-import { simpleStationDiscription } from '@/utils/radioStations'
+import {
+  simpleStationDiscription,
+  stationContainsString,
+} from '@/utils/radioStations'
 import { Station } from 'radio-browser-api'
 import * as React from 'react'
 import PlayButton from './PlayButton'
@@ -51,11 +54,7 @@ const StationList: React.FC<UserInfoProps> = ({
         {stations.map((station) => {
           const { id, name } = station
 
-          if (
-            showSearch &&
-            filter &&
-            !name.toLowerCase().includes(filter.toLowerCase())
-          ) {
+          if (showSearch && filter && !stationContainsString(station, filter)) {
             return null
           }
 
