@@ -9,7 +9,7 @@ export default function History() {
   if (!history.length) {
     return (
       <div className="flex flex-col items-center space-y-4 p-3">
-        <h3 className="font-bold text-lg">There is nothing in History</h3>
+        <h3 className="font-bold text-lg">No history yet</h3>
       </div>
     )
   }
