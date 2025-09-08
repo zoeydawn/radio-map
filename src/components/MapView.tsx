@@ -54,6 +54,7 @@ export default function MapView() {
             setViewedStation={setViewedStation}
             header="Stations near you"
             isLoading={isLoading}
+            showSearch
           />
         </div>
       )}
