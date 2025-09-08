@@ -23,7 +23,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [viewedStation, setViewedStation] = useState<Station | null>(null) // station to view details of
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [playError, setPlayError] = useState('')
-  const [favorites, setFavorites] = useState<Station[]>([]) // stations by geographic possition
+  const [favorites, setFavorites] = useState<Station[]>([])
 
   // save theme to local storage and update state
   const setAndSaveTheme = (theme: Theme) => {

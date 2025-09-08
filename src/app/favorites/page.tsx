@@ -13,13 +13,13 @@ export default function Favorites() {
       </div>
     )
   }
-
   return (
     <>
       <StationList
         stations={favorites}
         setViewedStation={setViewedStation}
         header="Your Favorites"
+        showSearch
       />
     </>
   )

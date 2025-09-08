@@ -13,6 +13,7 @@ interface UserInfoProps {
   isLoading?: boolean
   onLoadMore?: () => void
   hideLoadButton?: boolean
+  showSearch?: boolean
 }
 
 const StationList: React.FC<UserInfoProps> = ({
@@ -22,7 +23,10 @@ const StationList: React.FC<UserInfoProps> = ({
   isLoading,
   onLoadMore,
   hideLoadButton,
+  showSearch,
 }) => {
+  const [filter, setFilter] = React.useState('')
+
   return (
     <div className="pb-120">
       <ul className="list bg-base-100 rounded-box shadow-md max-w-150 m-auto mt-4">
@@ -32,8 +36,28 @@ const StationList: React.FC<UserInfoProps> = ({
           </li>
         )}
 
+        {showSearch && (
+          <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">
+            <input
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              type="text"
+              placeholder="Filter stations"
+              className="input"
+            />
+          </li>
+        )}
+
         {stations.map((station) => {
           const { id, name } = station
+
+          if (
+            showSearch &&
+            filter &&
+            !name.toLowerCase().includes(filter.toLowerCase())
+          ) {
+            return null
+          }
 
           return (
             <li className="list-row" key={`station-${id}`}>
